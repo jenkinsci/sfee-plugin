@@ -1,0 +1,136 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.jvnet.hudson.plugins</groupId>
+    <artifactId>plugin</artifactId>
+    <version>1.166</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>sfee</artifactId>
+  <packaging>hpi</packaging>
+  <version>1.0-SNAPSHOT</version>
+  
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>axistools-maven-plugin</artifactId>
+        <version>1.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1</version>
+          </dependency>
+          <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <urls>
+            <url>${sfee.url}/SourceForge?wsdl</url>
+            <url>${sfee.url}/RbacApp?wsdl</url>
+<!--
+            <url>${sfee.url}/AdminService?wsdl</url>
+            <url>${sfee.url}/DiscussionApp?wsdl</url>
+            <url>${sfee.url}/DocumentApp?wsdl</url>
+            <url>${sfee.url}/NewsApp?wsdl</url>
+            <url>${sfee.url}/ScmApp?wsdl</url>
+            <url>${sfee.url}/FrsApp?wsdl</url>
+            <url>${sfee.url}/TaskApp?wsdl</url>
+            <url>${sfee.url}/TrackerApp?wsdl</url>
+            <url>${sfee.url}/FileStorageApp?wsdl</url>
+            <url>${sfee.url}/WikiApp?wsdl</url>
+            <url>${sfee.url}/CategorizationApp?wsdl</url>
+            <url>${sfee.url}/IntegrationDataApp?wsdl</url>
+            <url>${sfee.url}/SimpleFileStorageApp?wsdl</url>
+            <url>${sfee.url}/Version?wsdl</url>
+-->
+          </urls>
+          <!--runTestCasesAsUnitTests>true</runTestCasesAsUnitTests-->
+          <packageSpace>hudson.plugins.sfee.webservice</packageSpace>
+          <testCases>false</testCases>
+          <serverSide>false</serverSide>
+          <subPackageByFileName>false</subPackageByFileName>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.activation</groupId>
+      <artifactId>activation</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.axis</groupId>
+      <artifactId>axis</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml</groupId>
+      <artifactId>jaxrpc-api</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml.soap</groupId>
+      <artifactId>saaj-api</artifactId>
+      <version>1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>axis</groupId>
+      <artifactId>axis-wsdl4j</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-discovery</groupId>
+      <artifactId>commons-discovery</artifactId>
+      <version>0.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-war</artifactId>
+      <type>war</type>
+      <version>${hudson.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jvnet.hudson.main</groupId>
+      <artifactId>hudson-core</artifactId>
+      <version>${hudson.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.3.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+  <properties>
+  	<sfee.url>http://sfee.open.collab.net/sf-soap43/services</sfee.url>
+  	<hudson.version>1.167-SNAPSHOT</hudson.version>
+  </properties>
+
+</project>

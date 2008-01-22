@@ -3,7 +3,6 @@ package hudson.plugins.sfee;
 import hudson.model.Descriptor;
 import hudson.security.SecurityRealm;
 
-import org.acegisecurity.AuthenticationManager;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -22,8 +21,8 @@ public class SFEESecurityRealm extends SecurityRealm {
 	}
 	
 	@Override
-	public AuthenticationManager createAuthenticationManager() {
-		return new SFEEAuthenticationManager(host);
+	public SecurityComponents createSecurityComponents() {
+		return new SecurityComponents(new SFEEAuthenticationManager(host));
 	}
 
 	public Descriptor<SecurityRealm> getDescriptor() {

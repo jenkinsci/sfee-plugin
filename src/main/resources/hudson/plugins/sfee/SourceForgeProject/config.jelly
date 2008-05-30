@@ -1,0 +1,38 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<f:section title="SourceForge">
+    <f:entry title="Project ID">
+        <select class="setting-input" name="projectId" onchange="sfee.updateTaskList(this)">
+        <j:forEach var="i" items="${descriptor.getPossibleProjectNames()}">
+            <f:option selected="${i.value==instance.projectId}" value="${i.value}">${i.name}</f:option>
+        </j:forEach>
+        </select>
+    </f:entry>
+    <f:entry title="Release Package Id">
+        <select class="setting-input" name="releasePackageId" id="releasePackageId">
+	        <j:forEach var="i" items="${descriptor.getPossibleReleasePackageIds(instance.projectId)}">
+	            <f:option selected="${i.value==instance.releasePackageId}" value="${i.value}">${i.name}</f:option>
+	        </j:forEach>
+        </select>
+    </f:entry>
+	</f:section>
+	
+    <script>
+      var sfee = {
+        <!-- Fill the combo box by using the configured project name -->
+        updateTaskList : function(e) {
+          try {
+            var Dom = YAHOO.util.Dom;
+            var tr = Dom.getAncestorByTagName(e,"TR").nextSibling;
+            while(tr.getAttribute("class")!=null)
+              tr=tr.nextSibling;
+            var combo = tr.getElementsByTagName("SELECT")[0];
+
+            updateListBox(releasePackageId,"${rootURL}/plugin/sfee/getReleasePackages?projectId="+e.value);
+          } catch(e) {
+            alert(e);
+          }
+        }
+      };
+    </script>
+
+</j:jelly>

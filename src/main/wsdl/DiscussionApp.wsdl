@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://schema.vasoftware.com/sf/soap43/service" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://schema.vasoftware.com/sf/soap43/service" xmlns:intf="http://schema.vasoftware.com/sf/soap43/service" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://schema.vasoftware.com/sf/soap43/type" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="http://schema.vasoftware.com/sf/soap43/type" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schema.vasoftware.com/sf/soap43/service"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType abstract="true" name="ObjectSoapDO">
+    <sequence>
+     <element name="createdBy" nillable="true" type="xsd:string"/>
+     <element name="createdDate" nillable="true" type="xsd:dateTime"/>
+     <element name="id" nillable="true" type="xsd:string"/>
+     <element name="lastModifiedBy" nillable="true" type="xsd:string"/>
+     <element name="lastModifiedDate" nillable="true" type="xsd:dateTime"/>
+     <element name="version" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType abstract="true" name="FolderSoapDO">
+    <complexContent>
+     <extension base="tns1:ObjectSoapDO">
+      <sequence>
+       <element name="description" nillable="true" type="xsd:string"/>
+       <element name="parentFolderId" nillable="true" type="xsd:string"/>
+       <element name="path" nillable="true" type="xsd:string"/>
+       <element name="projectId" nillable="true" type="xsd:string"/>
+       <element name="title" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="TopicSoapDO">
+    <complexContent>
+     <extension base="tns1:FolderSoapDO">
+      <sequence>
+       <element name="viewCount" type="xsd:int"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="WebServiceFault">
+    <sequence/>
+   </complexType>
+   <complexType name="InvalidSessionFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="NoSuchObjectFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="SystemFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="IllegalArgumentFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="PermissionDeniedFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="ItemSoapDO">
+    <complexContent>
+     <extension base="tns1:ObjectSoapDO">
+      <sequence>
+       <element name="folderId" nillable="true" type="xsd:string"/>
+       <element name="path" nillable="true" type="xsd:string"/>
+       <element name="title" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="PostSoapDO">
+    <complexContent>
+     <extension base="tns1:ItemSoapDO">
+      <sequence>
+       <element name="content" nillable="true" type="xsd:string"/>
+       <element name="replyToId" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="PostSoapRow">
+    <sequence>
+     <element name="content" nillable="true" type="xsd:string"/>
+     <element name="createdByUserName" nillable="true" type="xsd:string"/>
+     <element name="createdDate" nillable="true" type="xsd:dateTime"/>
+     <element name="forumId" nillable="true" type="xsd:string"/>
+     <element name="id" nillable="true" type="xsd:string"/>
+     <element name="projectId" nillable="true" type="xsd:string"/>
+     <element name="replyToId" nillable="true" type="xsd:string"/>
+     <element name="title" nillable="true" type="xsd:string"/>
+     <element name="topicId" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="PostSoapList">
+    <sequence>
+     <element name="dataRows" nillable="true" type="impl:ArrayOf_tns1_PostSoapRow"/>
+    </sequence>
+   </complexType>
+   <complexType abstract="true" name="FolderSoapList">
+    <sequence/>
+   </complexType>
+   <complexType name="FolderSoapRow">
+    <sequence>
+     <element name="description" nillable="true" type="xsd:string"/>
+     <element name="id" nillable="true" type="xsd:string"/>
+     <element name="parentFolderId" nillable="true" type="xsd:string"/>
+     <element name="path" nillable="true" type="xsd:string"/>
+     <element name="projectId" nillable="true" type="xsd:string"/>
+     <element name="title" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ForumSoapRow">
+    <complexContent>
+     <extension base="tns1:FolderSoapRow">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="ForumSoapList">
+    <complexContent>
+     <extension base="tns1:FolderSoapList">
+      <sequence>
+       <element name="dataRows" nillable="true" type="impl:ArrayOf_tns1_ForumSoapRow"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="TopicSoapRow">
+    <complexContent>
+     <extension base="tns1:FolderSoapRow">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="TopicSoapList">
+    <complexContent>
+     <extension base="tns1:FolderSoapList">
+      <sequence>
+       <element name="dataRows" nillable="true" type="impl:ArrayOf_tns1_TopicSoapRow"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="SearchQuerySyntaxFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+  </schema>
+  <schema targetNamespace="http://schema.vasoftware.com/sf/soap43/service" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schema.vasoftware.com/sf/soap43/type"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_tns1_PostSoapRow">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:PostSoapRow[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_ForumSoapRow">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:ForumSoapRow[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_TopicSoapRow">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:TopicSoapRow[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="createTopicRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="forumId" type="xsd:string"/>
+
+      <wsdl:part name="title" type="xsd:string"/>
+
+      <wsdl:part name="message" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="PermissionDeniedFault">
+
+      <wsdl:part name="fault" type="tns1:PermissionDeniedFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="SystemFault">
+
+      <wsdl:part name="fault" type="tns1:SystemFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getForumListRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="projectId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="InvalidSessionFault">
+
+      <wsdl:part name="fault" type="tns1:InvalidSessionFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="SearchQuerySyntaxFault">
+
+      <wsdl:part name="fault" type="tns1:SearchQuerySyntaxFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getForumListResponse">
+
+      <wsdl:part name="getForumListReturn" type="tns1:ForumSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPostsResponse">
+
+      <wsdl:part name="findPostsReturn" type="tns1:PostSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteTopicResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getTopicListRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="forumId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="NoSuchObjectFault">
+
+      <wsdl:part name="fault" type="tns1:NoSuchObjectFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createTopicResponse">
+
+      <wsdl:part name="createTopicReturn" type="tns1:TopicSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getPostListRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="topicId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findPostsRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="queryString" type="xsd:string"/>
+
+      <wsdl:part name="projectId" type="xsd:string"/>
+
+      <wsdl:part name="searchAttachments" type="xsd:boolean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deletePostRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="postId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="IllegalArgumentFault">
+
+      <wsdl:part name="fault" type="tns1:IllegalArgumentFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTopicListResponse">
+
+      <wsdl:part name="getTopicListReturn" type="tns1:TopicSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteTopicRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="topicId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deletePostResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getPostListResponse">
+
+      <wsdl:part name="getPostListReturn" type="tns1:PostSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createPostResponse">
+
+      <wsdl:part name="createPostReturn" type="tns1:PostSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createPostRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="parentPostId" type="xsd:string"/>
+
+      <wsdl:part name="title" type="xsd:string"/>
+
+      <wsdl:part name="message" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="DiscussionAppSoap">
+
+      <wsdl:operation name="createTopic" parameterOrder="sessionId forumId title message">
+
+         <wsdl:input message="impl:createTopicRequest" name="createTopicRequest"/>
+
+         <wsdl:output message="impl:createTopicResponse" name="createTopicResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteTopic" parameterOrder="sessionId topicId">
+
+         <wsdl:input message="impl:deleteTopicRequest" name="deleteTopicRequest"/>
+
+         <wsdl:output message="impl:deleteTopicResponse" name="deleteTopicResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createPost" parameterOrder="sessionId parentPostId title message">
+
+         <wsdl:input message="impl:createPostRequest" name="createPostRequest"/>
+
+         <wsdl:output message="impl:createPostResponse" name="createPostResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deletePost" parameterOrder="sessionId postId">
+
+         <wsdl:input message="impl:deletePostRequest" name="deletePostRequest"/>
+
+         <wsdl:output message="impl:deletePostResponse" name="deletePostResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPostList" parameterOrder="sessionId topicId">
+
+         <wsdl:input message="impl:getPostListRequest" name="getPostListRequest"/>
+
+         <wsdl:output message="impl:getPostListResponse" name="getPostListResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getForumList" parameterOrder="sessionId projectId">
+
+         <wsdl:input message="impl:getForumListRequest" name="getForumListRequest"/>
+
+         <wsdl:output message="impl:getForumListResponse" name="getForumListResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTopicList" parameterOrder="sessionId forumId">
+
+         <wsdl:input message="impl:getTopicListRequest" name="getTopicListRequest"/>
+
+         <wsdl:output message="impl:getTopicListResponse" name="getTopicListResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPosts" parameterOrder="sessionId queryString projectId searchAttachments">
+
+         <wsdl:input message="impl:findPostsRequest" name="findPostsRequest"/>
+
+         <wsdl:output message="impl:findPostsResponse" name="findPostsResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:SearchQuerySyntaxFault" name="SearchQuerySyntaxFault"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="DiscussionAppSoapBinding" type="impl:DiscussionAppSoap">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="createTopic">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createTopicRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createTopicResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteTopic">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="deleteTopicRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="deleteTopicResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createPost">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createPostRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createPostResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deletePost">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="deletePostRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="deletePostResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPostList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getPostListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getPostListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getForumList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getForumListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getForumListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTopicList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTopicListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTopicListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findPosts">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findPostsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findPostsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SearchQuerySyntaxFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SearchQuerySyntaxFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="DiscussionAppSoapService">
+
+      <wsdl:port binding="impl:DiscussionAppSoapBinding" name="DiscussionApp">
+
+         <wsdlsoap:address location="http://localhost:8080/sf-soap43/services/DiscussionApp"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

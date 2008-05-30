@@ -1,0 +1,7 @@
+<j:jelly xmlns:j="jelly:core">
+	<a href="${it.getFileReleaseUrl()}">
+		<img width="16" height="16"
+		  title="Uploaded to SFEE"
+		  src="${imagesURL}/16x16/star-gold.gif"/>
+	</a>
+</j:jelly>

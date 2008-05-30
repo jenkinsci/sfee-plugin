@@ -1,0 +1,42 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:test="/lib/test">
+  <l:layout permission="${it.REDEPLOY}">
+    <st:include it="${it.build}" page="sidepanel.jelly" />
+    <l:side-panel>
+      <st:include it="${it.historyWidget}" page="index.jelly" />
+    </l:side-panel>
+
+    <l:main-panel>
+      <h1>
+        <img src="${imagesURL}/48x48/redo.gif" width="48" height="48" />
+        Upload Artifacts to SourceForge
+      </h1>
+      
+      <j:choose>
+        <!-- A deployment is in progress -->
+        <j:when test="${it.workerThread!=null}">
+          <st:include page="log.jelly" />
+        </j:when>
+
+        <!-- No deployment is in progress. Display the form. -->
+        <j:otherwise>
+          <j:choose>
+          <j:when test="${it.isCompleted()}">
+          	The <a href="${it.getFileReleaseUrl()}">upload</a> was successful.
+          </j:when>
+          <j:otherwise>
+	          <p>
+	            This page allows you to upload the build artifacts to SourceForge.
+	          </p>
+	          <f:form method="post" action="upload">
+	            <f:block>
+	              <f:submit value="Upload" style="margin-top:1em;" />
+	            </f:block>
+	          </f:form>
+          </j:otherwise>
+			</j:choose>
+        </j:otherwise>
+      </j:choose>
+
+    </l:main-panel>
+  </l:layout>
+</j:jelly>

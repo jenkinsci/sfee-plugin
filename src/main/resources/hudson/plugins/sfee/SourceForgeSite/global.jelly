@@ -1,0 +1,17 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <f:section title="SFEE">
+    <f:entry title="SFEE site"
+      description="SFEE host name">
+            <f:textbox name="sfee.site" value="${descriptor.site.site}"/>
+	  </f:entry>
+	  <f:entry title="User Name" help="/plugin/sfee/help-login.html">
+	    <f:textbox name="sfee.userName" value="${descriptor.site.userName}"
+	        />
+	  </f:entry>
+	  <f:entry title="Password"
+	      description="">
+	    <input class="setting-input" name="sfee.password"
+	           type="password" value="${descriptor.site.password}" />
+	  </f:entry>
+  </f:section>
+</j:jelly>

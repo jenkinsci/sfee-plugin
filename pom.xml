@@ -33,26 +33,6 @@
           </dependency>
         </dependencies>
         <configuration>
-          <urls>
-            <url>${sfee.url}/SourceForge?wsdl</url>
-            <url>${sfee.url}/RbacApp?wsdl</url>
-<!--
-            <url>${sfee.url}/AdminService?wsdl</url>
-            <url>${sfee.url}/DiscussionApp?wsdl</url>
-            <url>${sfee.url}/DocumentApp?wsdl</url>
-            <url>${sfee.url}/NewsApp?wsdl</url>
-            <url>${sfee.url}/ScmApp?wsdl</url>
-            <url>${sfee.url}/FrsApp?wsdl</url>
-            <url>${sfee.url}/TaskApp?wsdl</url>
-            <url>${sfee.url}/TrackerApp?wsdl</url>
-            <url>${sfee.url}/FileStorageApp?wsdl</url>
-            <url>${sfee.url}/WikiApp?wsdl</url>
-            <url>${sfee.url}/CategorizationApp?wsdl</url>
-            <url>${sfee.url}/IntegrationDataApp?wsdl</url>
-            <url>${sfee.url}/SimpleFileStorageApp?wsdl</url>
-            <url>${sfee.url}/Version?wsdl</url>
--->
-          </urls>
           <!--runTestCasesAsUnitTests>true</runTestCasesAsUnitTests-->
           <packageSpace>hudson.plugins.sfee.webservice</packageSpace>
           <testCases>false</testCases>
@@ -71,11 +51,11 @@
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>javax.activation</groupId>
-      <artifactId>activation</artifactId>
-      <version>1.1</version>
-    </dependency>
+  	<dependency>
+	    <groupId>org.jvnet.hudson.plugins</groupId>
+	    <artifactId>description-setter</artifactId>
+	    <version>1.0</version>
+  	</dependency>
     <dependency>
       <groupId>org.apache.axis</groupId>
       <artifactId>axis</artifactId>
@@ -90,6 +70,12 @@
       <groupId>javax.xml.soap</groupId>
       <artifactId>saaj-api</artifactId>
       <version>1.3</version>
+      <exclusions>
+      	<exclusion>
+      		<groupId>javax.activation</groupId>
+      		<artifactId>activation</artifactId>
+      	</exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>axis</groupId>
@@ -107,9 +93,5 @@
       <version>0.2</version>
     </dependency>
   </dependencies>
-  
-  <properties>
-  	<sfee.url>http://sfee.open.collab.net/sf-soap43/services</sfee.url>
-  </properties>
 
 </project>

@@ -1,0 +1,23 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	  <t:summary icon="star-gold.gif">
+
+		<j:set var="url" value="${h.getNearestAncestorUrl(request,it)}"/>
+		<j:choose>
+			<j:when test="${it.resolvedTrackerArtifacts != null and it.resolvedTrackerArtifacts.size() gt 0}">
+		  		<l:pane width="2" title="Artifacts resolved in &lt;a href=&quot;${it.downloadURL}&quot;&gt;${it.releaseName}&lt;/a&gt;">
+		        <j:forEach var="t" items="${it.releaseTask.resolvedTrackerArtifacts}">
+		        	<tr>
+		        		<td><a href="${t.getURL()}">${t.id}</a></td>
+		        		<td>${t.title}</td>
+		        	</tr>
+		        </j:forEach>
+				</l:pane>
+			</j:when>
+			<j:otherwise>
+				<a href="${it.releaseTask.fileReleaseUrl}">Released to SourceForge</a>
+			</j:otherwise>
+		</j:choose>
+		
+	  </t:summary>
+</j:jelly>
+

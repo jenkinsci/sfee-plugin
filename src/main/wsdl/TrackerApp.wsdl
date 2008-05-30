@@ -1,0 +1,3104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://schema.vasoftware.com/sf/soap43/service" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://schema.vasoftware.com/sf/soap43/service" xmlns:intf="http://schema.vasoftware.com/sf/soap43/service" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://schema.vasoftware.com/sf/soap43/type" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="http://schema.vasoftware.com/sf/soap43/type" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schema.vasoftware.com/sf/soap43/service"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType abstract="true" name="ObjectSoapDO">
+    <sequence>
+     <element name="createdBy" nillable="true" type="xsd:string"/>
+     <element name="createdDate" nillable="true" type="xsd:dateTime"/>
+     <element name="id" nillable="true" type="xsd:string"/>
+     <element name="lastModifiedBy" nillable="true" type="xsd:string"/>
+     <element name="lastModifiedDate" nillable="true" type="xsd:dateTime"/>
+     <element name="version" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="TrackerFieldValueSoapDO">
+    <sequence>
+     <element name="id" nillable="true" type="xsd:string"/>
+     <element name="isDefault" type="xsd:boolean"/>
+     <element name="value" nillable="true" type="xsd:string"/>
+     <element name="valueClass" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="TrackerFieldSoapDO">
+    <complexContent>
+     <extension base="tns1:ObjectSoapDO">
+      <sequence>
+       <element name="defaultTextValue" nillable="true" type="xsd:string"/>
+       <element name="disabled" type="xsd:boolean"/>
+       <element name="displayLines" type="xsd:int"/>
+       <element name="displaySize" type="xsd:int"/>
+       <element name="fieldType" nillable="true" type="xsd:string"/>
+       <element name="fieldValues" nillable="true" type="impl:ArrayOf_tns1_TrackerFieldValueSoapDO"/>
+       <element name="hiddenOnCreate" type="xsd:boolean"/>
+       <element name="name" nillable="true" type="xsd:string"/>
+       <element name="required" type="xsd:boolean"/>
+       <element name="valueType" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="WebServiceFault">
+    <sequence/>
+   </complexType>
+   <complexType name="InvalidSessionFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="NoSuchObjectFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="PermissionDeniedFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="SystemFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="VersionMismatchFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="IllegalArgumentFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="InvalidOperationFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="ItemSoapDO">
+    <complexContent>
+     <extension base="tns1:ObjectSoapDO">
+      <sequence>
+       <element name="folderId" nillable="true" type="xsd:string"/>
+       <element name="path" nillable="true" type="xsd:string"/>
+       <element name="title" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="SoapNamedValues">
+    <sequence>
+     <element name="names" nillable="true" type="impl:ArrayOf_xsd_string"/>
+     <element name="values" nillable="true" type="impl:ArrayOf_xsd_string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArtifactSoapDO">
+    <complexContent>
+     <extension base="tns1:ItemSoapDO">
+      <sequence>
+       <element name="actualHours" type="xsd:int"/>
+       <element name="assignedTo" nillable="true" type="xsd:string"/>
+       <element name="category" nillable="true" type="xsd:string"/>
+       <element name="closeDate" nillable="true" type="xsd:dateTime"/>
+       <element name="customer" nillable="true" type="xsd:string"/>
+       <element name="description" nillable="true" type="xsd:string"/>
+       <element name="estimatedHours" type="xsd:int"/>
+       <element name="flexFields" nillable="true" type="tns1:SoapNamedValues"/>
+       <element name="group" nillable="true" type="xsd:string"/>
+       <element name="priority" type="xsd:int"/>
+       <element name="reportedReleaseId" nillable="true" type="xsd:string"/>
+       <element name="resolvedReleaseId" nillable="true" type="xsd:string"/>
+       <element name="status" nillable="true" type="xsd:string"/>
+       <element name="statusClass" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType abstract="true" name="FolderSoapDO">
+    <complexContent>
+     <extension base="tns1:ObjectSoapDO">
+      <sequence>
+       <element name="description" nillable="true" type="xsd:string"/>
+       <element name="parentFolderId" nillable="true" type="xsd:string"/>
+       <element name="path" nillable="true" type="xsd:string"/>
+       <element name="projectId" nillable="true" type="xsd:string"/>
+       <element name="title" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="TrackerSoapDO">
+    <complexContent>
+     <extension base="tns1:FolderSoapDO">
+      <sequence>
+       <element name="assignments" nillable="true" type="tns1:SoapNamedValues"/>
+       <element name="autoAssignField" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="WorkflowViolationFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="ObjectAlreadyExistsFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType abstract="true" name="FolderSoapList">
+    <sequence/>
+   </complexType>
+   <complexType name="FolderSoapRow">
+    <sequence>
+     <element name="description" nillable="true" type="xsd:string"/>
+     <element name="id" nillable="true" type="xsd:string"/>
+     <element name="parentFolderId" nillable="true" type="xsd:string"/>
+     <element name="path" nillable="true" type="xsd:string"/>
+     <element name="projectId" nillable="true" type="xsd:string"/>
+     <element name="title" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="TrackerSoapRow">
+    <complexContent>
+     <extension base="tns1:FolderSoapRow">
+      <sequence>
+       <element name="lastEditedByFullname" nillable="true" type="xsd:string"/>
+       <element name="lastEditedByUsername" nillable="true" type="xsd:string"/>
+       <element name="lastEditedDate" nillable="true" type="xsd:dateTime"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="TrackerSoapList">
+    <complexContent>
+     <extension base="tns1:FolderSoapList">
+      <sequence>
+       <element name="dataRows" nillable="true" type="impl:ArrayOf_tns1_TrackerSoapRow"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="TrackerField2SoapDO">
+    <complexContent>
+     <extension base="tns1:ObjectSoapDO">
+      <sequence>
+       <element name="defaultTextValue" nillable="true" type="xsd:string"/>
+       <element name="defaultUsernames" nillable="true" type="impl:ArrayOf_xsd_string"/>
+       <element name="disabled" type="xsd:boolean"/>
+       <element name="displayLines" type="xsd:int"/>
+       <element name="displaySize" type="xsd:int"/>
+       <element name="fieldType" nillable="true" type="xsd:string"/>
+       <element name="fieldValues" nillable="true" type="impl:ArrayOf_tns1_TrackerFieldValueSoapDO"/>
+       <element name="hiddenOnCreate" type="xsd:boolean"/>
+       <element name="name" nillable="true" type="xsd:string"/>
+       <element name="required" type="xsd:boolean"/>
+       <element name="userFilter" nillable="true" type="xsd:string"/>
+       <element name="valueType" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="SoapFilter">
+    <sequence>
+     <element name="name" nillable="true" type="xsd:string"/>
+     <element name="value" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArtifactSoapRow">
+    <sequence>
+     <element name="actualHours" type="xsd:int"/>
+     <element name="artifactGroup" nillable="true" type="xsd:string"/>
+     <element name="assignedToFullname" nillable="true" type="xsd:string"/>
+     <element name="assignedToUsername" nillable="true" type="xsd:string"/>
+     <element name="category" nillable="true" type="xsd:string"/>
+     <element name="closeDate" nillable="true" type="xsd:dateTime"/>
+     <element name="customer" nillable="true" type="xsd:string"/>
+     <element name="description" nillable="true" type="xsd:string"/>
+     <element name="estimatedHours" type="xsd:int"/>
+     <element name="folderId" nillable="true" type="xsd:string"/>
+     <element name="folderPathString" nillable="true" type="xsd:string"/>
+     <element name="folderTitle" nillable="true" type="xsd:string"/>
+     <element name="id" nillable="true" type="xsd:string"/>
+     <element name="lastModifiedDate" nillable="true" type="xsd:dateTime"/>
+     <element name="priority" type="xsd:int"/>
+     <element name="projectId" nillable="true" type="xsd:string"/>
+     <element name="projectPathString" nillable="true" type="xsd:string"/>
+     <element name="projectTitle" nillable="true" type="xsd:string"/>
+     <element name="status" nillable="true" type="xsd:string"/>
+     <element name="statusClass" nillable="true" type="xsd:string"/>
+     <element name="submittedByFullname" nillable="true" type="xsd:string"/>
+     <element name="submittedByUsername" nillable="true" type="xsd:string"/>
+     <element name="submittedDate" nillable="true" type="xsd:dateTime"/>
+     <element name="title" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArtifactSoapList">
+    <sequence>
+     <element name="dataRows" nillable="true" type="impl:ArrayOf_tns1_ArtifactSoapRow"/>
+    </sequence>
+   </complexType>
+   <complexType name="InvalidFilterFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="ArtifactDetailSoapRow">
+    <sequence>
+     <element name="actualHours" type="xsd:int"/>
+     <element name="artifactGroup" nillable="true" type="xsd:string"/>
+     <element name="assignedToFullname" nillable="true" type="xsd:string"/>
+     <element name="assignedToUsername" nillable="true" type="xsd:string"/>
+     <element name="category" nillable="true" type="xsd:string"/>
+     <element name="closeDate" nillable="true" type="xsd:dateTime"/>
+     <element name="customer" nillable="true" type="xsd:string"/>
+     <element name="description" nillable="true" type="xsd:string"/>
+     <element name="estimatedHours" type="xsd:int"/>
+     <element name="flexFields" nillable="true" type="tns1:SoapNamedValues"/>
+     <element name="folderId" nillable="true" type="xsd:string"/>
+     <element name="folderPathString" nillable="true" type="xsd:string"/>
+     <element name="folderTitle" nillable="true" type="xsd:string"/>
+     <element name="id" nillable="true" type="xsd:string"/>
+     <element name="lastModifiedDate" nillable="true" type="xsd:dateTime"/>
+     <element name="priority" type="xsd:int"/>
+     <element name="projectId" nillable="true" type="xsd:string"/>
+     <element name="projectPathString" nillable="true" type="xsd:string"/>
+     <element name="projectTitle" nillable="true" type="xsd:string"/>
+     <element name="reportedInReleaseTitle" nillable="true" type="xsd:string"/>
+     <element name="resolvedInReleaseTitle" nillable="true" type="xsd:string"/>
+     <element name="status" nillable="true" type="xsd:string"/>
+     <element name="statusClass" nillable="true" type="xsd:string"/>
+     <element name="submittedByFullname" nillable="true" type="xsd:string"/>
+     <element name="submittedByUsername" nillable="true" type="xsd:string"/>
+     <element name="submittedDate" nillable="true" type="xsd:dateTime"/>
+     <element name="title" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArtifactDetailSoapList">
+    <sequence>
+     <element name="dataRows" nillable="true" type="impl:ArrayOf_tns1_ArtifactDetailSoapRow"/>
+    </sequence>
+   </complexType>
+   <complexType name="SoapFieldValues">
+    <sequence>
+     <element name="names" nillable="true" type="impl:ArrayOf_xsd_string"/>
+     <element name="types" nillable="true" type="impl:ArrayOf_xsd_string"/>
+     <element name="values" nillable="true" type="impl:ArrayOf_xsd_anyType"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArtifactDetail2SoapRow">
+    <sequence>
+     <element name="actualHours" type="xsd:int"/>
+     <element name="artifactGroup" nillable="true" type="xsd:string"/>
+     <element name="assignedToFullname" nillable="true" type="xsd:string"/>
+     <element name="assignedToUsername" nillable="true" type="xsd:string"/>
+     <element name="category" nillable="true" type="xsd:string"/>
+     <element name="closeDate" nillable="true" type="xsd:dateTime"/>
+     <element name="customer" nillable="true" type="xsd:string"/>
+     <element name="description" nillable="true" type="xsd:string"/>
+     <element name="estimatedHours" type="xsd:int"/>
+     <element name="flexFields" nillable="true" type="tns1:SoapFieldValues"/>
+     <element name="folderId" nillable="true" type="xsd:string"/>
+     <element name="folderPathString" nillable="true" type="xsd:string"/>
+     <element name="folderTitle" nillable="true" type="xsd:string"/>
+     <element name="id" nillable="true" type="xsd:string"/>
+     <element name="lastModifiedDate" nillable="true" type="xsd:dateTime"/>
+     <element name="priority" type="xsd:int"/>
+     <element name="projectId" nillable="true" type="xsd:string"/>
+     <element name="projectPathString" nillable="true" type="xsd:string"/>
+     <element name="projectTitle" nillable="true" type="xsd:string"/>
+     <element name="reportedInReleaseTitle" nillable="true" type="xsd:string"/>
+     <element name="resolvedInReleaseTitle" nillable="true" type="xsd:string"/>
+     <element name="status" nillable="true" type="xsd:string"/>
+     <element name="statusClass" nillable="true" type="xsd:string"/>
+     <element name="submittedByFullname" nillable="true" type="xsd:string"/>
+     <element name="submittedByUsername" nillable="true" type="xsd:string"/>
+     <element name="submittedDate" nillable="true" type="xsd:dateTime"/>
+     <element name="title" nillable="true" type="xsd:string"/>
+     <element name="version" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArtifactDetail2SoapList">
+    <sequence>
+     <element name="dataRows" nillable="true" type="impl:ArrayOf_tns1_ArtifactDetail2SoapRow"/>
+    </sequence>
+   </complexType>
+   <complexType name="SearchQuerySyntaxFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="Artifact2SoapDO">
+    <complexContent>
+     <extension base="tns1:ItemSoapDO">
+      <sequence>
+       <element name="actualHours" type="xsd:int"/>
+       <element name="assignedTo" nillable="true" type="xsd:string"/>
+       <element name="category" nillable="true" type="xsd:string"/>
+       <element name="closeDate" nillable="true" type="xsd:dateTime"/>
+       <element name="customer" nillable="true" type="xsd:string"/>
+       <element name="description" nillable="true" type="xsd:string"/>
+       <element name="estimatedHours" type="xsd:int"/>
+       <element name="flexFields" nillable="true" type="tns1:SoapFieldValues"/>
+       <element name="group" nillable="true" type="xsd:string"/>
+       <element name="priority" type="xsd:int"/>
+       <element name="reportedReleaseId" nillable="true" type="xsd:string"/>
+       <element name="resolvedReleaseId" nillable="true" type="xsd:string"/>
+       <element name="status" nillable="true" type="xsd:string"/>
+       <element name="statusClass" nillable="true" type="xsd:string"/>
+      </sequence>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="WorkflowTransitionSoapRow">
+    <sequence>
+     <element name="displayOrder" nillable="true" type="xsd:int"/>
+     <element name="fromStatusName" nillable="true" type="xsd:string"/>
+     <element name="requiredFields" nillable="true" type="impl:ArrayOf_xsd_string"/>
+     <element name="toStatusName" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="WorkflowTransitionSoapList">
+    <sequence>
+     <element name="dataRows" nillable="true" type="impl:ArrayOf_tns1_WorkflowTransitionSoapRow"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema targetNamespace="http://schema.vasoftware.com/sf/soap43/service" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schema.vasoftware.com/sf/soap43/type"/>
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_tns1_TrackerFieldValueSoapDO">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:TrackerFieldValueSoapDO[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_TrackerFieldSoapDO">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:TrackerFieldSoapDO[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_xsd_string">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_TrackerSoapRow">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:TrackerSoapRow[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_TrackerField2SoapDO">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:TrackerField2SoapDO[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_SoapFilter">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:SoapFilter[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_ArtifactSoapRow">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:ArtifactSoapRow[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_ArtifactDetailSoapRow">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:ArtifactDetailSoapRow[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_xsd_anyType">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_ArtifactDetail2SoapRow">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:ArtifactDetail2SoapRow[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_WorkflowTransitionSoapRow">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:WorkflowTransitionSoapRow[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getArtifactDetailList2Request">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+      <wsdl:part name="filters" type="impl:ArrayOf_tns1_SoapFilter"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTrackerListRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="projectId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setFieldRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="objectId" type="xsd:string"/>
+
+      <wsdl:part name="fieldData" type="tns1:TrackerFieldSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFields2Response">
+
+      <wsdl:part name="getFields2Return" type="impl:ArrayOf_tns1_TrackerField2SoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteFieldResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="setTrackerDataRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerData" type="tns1:TrackerSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addTextFieldResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getArtifactDetailList2Response">
+
+      <wsdl:part name="getArtifactDetailList2Return" type="tns1:ArtifactDetail2SoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findArtifactsRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="queryString" type="xsd:string"/>
+
+      <wsdl:part name="projectId" type="xsd:string"/>
+
+      <wsdl:part name="searchAttachments" type="xsd:boolean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="NoSuchObjectFault">
+
+      <wsdl:part name="fault" type="tns1:NoSuchObjectFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="moveArtifact2Response">
+
+      <wsdl:part name="moveArtifact2Return" type="tns1:Artifact2SoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteArtifactRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="artifactId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createTrackerResponse">
+
+      <wsdl:part name="createTrackerReturn" type="tns1:TrackerSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="moveArtifact2Request">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="artifactId" type="xsd:string"/>
+
+      <wsdl:part name="targetFolderId" type="xsd:string"/>
+
+      <wsdl:part name="newAssignee" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createTrackerRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="projectId" type="xsd:string"/>
+
+      <wsdl:part name="trackerName" type="xsd:string"/>
+
+      <wsdl:part name="trackerTitle" type="xsd:string"/>
+
+      <wsdl:part name="trackerDescription" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteFieldRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="objectId" type="xsd:string"/>
+
+      <wsdl:part name="fieldId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getArtifactListRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="containerId" type="xsd:string"/>
+
+      <wsdl:part name="filters" type="impl:ArrayOf_tns1_SoapFilter"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addSingleSelectFieldResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="createArtifact2Request">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+      <wsdl:part name="title" type="xsd:string"/>
+
+      <wsdl:part name="description" type="xsd:string"/>
+
+      <wsdl:part name="group" type="xsd:string"/>
+
+      <wsdl:part name="category" type="xsd:string"/>
+
+      <wsdl:part name="status" type="xsd:string"/>
+
+      <wsdl:part name="customer" type="xsd:string"/>
+
+      <wsdl:part name="priority" type="xsd:int"/>
+
+      <wsdl:part name="estimatedHours" type="xsd:int"/>
+
+      <wsdl:part name="assignedUsername" type="xsd:string"/>
+
+      <wsdl:part name="releaseId" type="xsd:string"/>
+
+      <wsdl:part name="flexFields" type="tns1:SoapFieldValues"/>
+
+      <wsdl:part name="attachmentFileName" type="xsd:string"/>
+
+      <wsdl:part name="attachmentMimeType" type="xsd:string"/>
+
+      <wsdl:part name="attachmentFileId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getArtifactData2Request">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="artifactId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getArtifactData2Response">
+
+      <wsdl:part name="getArtifactData2Return" type="tns1:Artifact2SoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setFieldResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="InvalidSessionFault">
+
+      <wsdl:part name="fault" type="tns1:InvalidSessionFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addMultiSelectFieldRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+      <wsdl:part name="fieldName" type="xsd:string"/>
+
+      <wsdl:part name="displayLines" type="xsd:int"/>
+
+      <wsdl:part name="isRequired" type="xsd:boolean"/>
+
+      <wsdl:part name="isDisabled" type="xsd:boolean"/>
+
+      <wsdl:part name="isHiddenOnCreate" type="xsd:boolean"/>
+
+      <wsdl:part name="fieldValues" type="impl:ArrayOf_xsd_string"/>
+
+      <wsdl:part name="defaultValues" type="impl:ArrayOf_xsd_string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setArtifactDataRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="artifactData" type="tns1:ArtifactSoapDO"/>
+
+      <wsdl:part name="comment" type="xsd:string"/>
+
+      <wsdl:part name="attachmentFileName" type="xsd:string"/>
+
+      <wsdl:part name="attachmentMimeType" type="xsd:string"/>
+
+      <wsdl:part name="attachmentFileId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAllowedWorkflowTransitionListResponse">
+
+      <wsdl:part name="getAllowedWorkflowTransitionListReturn" type="tns1:WorkflowTransitionSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setArtifactData2Response">
+
+   </wsdl:message>
+
+   <wsdl:message name="getFieldsResponse">
+
+      <wsdl:part name="getFieldsReturn" type="impl:ArrayOf_tns1_TrackerFieldSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createArtifactResponse">
+
+      <wsdl:part name="createArtifactReturn" type="tns1:ArtifactSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getArtifactDataRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="artifactId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findArtifactsResponse">
+
+      <wsdl:part name="findArtifactsReturn" type="tns1:ArtifactSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setTrackerDataResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteArtifactResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="SystemFault">
+
+      <wsdl:part name="fault" type="tns1:SystemFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="moveArtifactResponse">
+
+      <wsdl:part name="moveArtifactReturn" type="tns1:ArtifactSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="WorkflowViolationFault">
+
+      <wsdl:part name="fault" type="tns1:WorkflowViolationFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="SearchQuerySyntaxFault">
+
+      <wsdl:part name="fault" type="tns1:SearchQuerySyntaxFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getArtifactDetailListRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+      <wsdl:part name="filters" type="impl:ArrayOf_tns1_SoapFilter"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addDateFieldResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="addTextFieldRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+      <wsdl:part name="fieldName" type="xsd:string"/>
+
+      <wsdl:part name="displayColumns" type="xsd:int"/>
+
+      <wsdl:part name="displayLines" type="xsd:int"/>
+
+      <wsdl:part name="isRequired" type="xsd:boolean"/>
+
+      <wsdl:part name="isDisabled" type="xsd:boolean"/>
+
+      <wsdl:part name="isHiddenOnCreate" type="xsd:boolean"/>
+
+      <wsdl:part name="defaultValue" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAllowedWorkflowTransitionListRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addMultiSelectFieldResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="addUserSelectFieldRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+      <wsdl:part name="fieldName" type="xsd:string"/>
+
+      <wsdl:part name="fieldSize" type="xsd:int"/>
+
+      <wsdl:part name="isRequired" type="xsd:boolean"/>
+
+      <wsdl:part name="isDisabled" type="xsd:boolean"/>
+
+      <wsdl:part name="isHiddenOnCreate" type="xsd:boolean"/>
+
+      <wsdl:part name="defaultValues" type="impl:ArrayOf_xsd_string"/>
+
+      <wsdl:part name="userFilter" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setArtifactData2Request">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="artifactData" type="tns1:Artifact2SoapDO"/>
+
+      <wsdl:part name="comment" type="xsd:string"/>
+
+      <wsdl:part name="attachmentFileName" type="xsd:string"/>
+
+      <wsdl:part name="attachmentMimeType" type="xsd:string"/>
+
+      <wsdl:part name="attachmentFileId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addDateFieldRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+      <wsdl:part name="fieldName" type="xsd:string"/>
+
+      <wsdl:part name="isRequired" type="xsd:boolean"/>
+
+      <wsdl:part name="isDisabled" type="xsd:boolean"/>
+
+      <wsdl:part name="isHiddenOnCreate" type="xsd:boolean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="PermissionDeniedFault">
+
+      <wsdl:part name="fault" type="tns1:PermissionDeniedFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getArtifactDataResponse">
+
+      <wsdl:part name="getArtifactDataReturn" type="tns1:ArtifactSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getArtifactListResponse">
+
+      <wsdl:part name="getArtifactListReturn" type="tns1:ArtifactSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setField2Response">
+
+   </wsdl:message>
+
+   <wsdl:message name="getFields2Request">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addUserSelectFieldResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="VersionMismatchFault">
+
+      <wsdl:part name="fault" type="tns1:VersionMismatchFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setField2Request">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="objectId" type="xsd:string"/>
+
+      <wsdl:part name="fieldData" type="tns1:TrackerField2SoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="copyWorkflowTransitionsRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="srcTrackerId" type="xsd:string"/>
+
+      <wsdl:part name="dstTrackerId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTrackerDataResponse">
+
+      <wsdl:part name="getTrackerDataReturn" type="tns1:TrackerSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="moveArtifactRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="artifactId" type="xsd:string"/>
+
+      <wsdl:part name="targetFolderId" type="xsd:string"/>
+
+      <wsdl:part name="newAssignee" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="copyWorkflowTransitionsResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="createArtifactRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+      <wsdl:part name="title" type="xsd:string"/>
+
+      <wsdl:part name="description" type="xsd:string"/>
+
+      <wsdl:part name="group" type="xsd:string"/>
+
+      <wsdl:part name="category" type="xsd:string"/>
+
+      <wsdl:part name="status" type="xsd:string"/>
+
+      <wsdl:part name="customer" type="xsd:string"/>
+
+      <wsdl:part name="priority" type="xsd:int"/>
+
+      <wsdl:part name="estimatedHours" type="xsd:int"/>
+
+      <wsdl:part name="assignedUsername" type="xsd:string"/>
+
+      <wsdl:part name="releaseId" type="xsd:string"/>
+
+      <wsdl:part name="flexFields" type="tns1:SoapNamedValues"/>
+
+      <wsdl:part name="attachmentFileName" type="xsd:string"/>
+
+      <wsdl:part name="attachmentMimeType" type="xsd:string"/>
+
+      <wsdl:part name="attachmentFileId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createArtifact2Response">
+
+      <wsdl:part name="createArtifact2Return" type="tns1:Artifact2SoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="InvalidOperationFault">
+
+      <wsdl:part name="fault" type="tns1:InvalidOperationFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getArtifactDetailListResponse">
+
+      <wsdl:part name="getArtifactDetailListReturn" type="tns1:ArtifactDetailSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setArtifactDataResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="IllegalArgumentFault">
+
+      <wsdl:part name="fault" type="tns1:IllegalArgumentFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addSingleSelectFieldRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+      <wsdl:part name="fieldName" type="xsd:string"/>
+
+      <wsdl:part name="isRequired" type="xsd:boolean"/>
+
+      <wsdl:part name="isDisabled" type="xsd:boolean"/>
+
+      <wsdl:part name="isHiddenOnCreate" type="xsd:boolean"/>
+
+      <wsdl:part name="fieldValues" type="impl:ArrayOf_xsd_string"/>
+
+      <wsdl:part name="defaultValue" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="InvalidFilterFault">
+
+      <wsdl:part name="fault" type="tns1:InvalidFilterFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="ObjectAlreadyExistsFault">
+
+      <wsdl:part name="fault" type="tns1:ObjectAlreadyExistsFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFieldsRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTrackerDataRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="trackerId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTrackerListResponse">
+
+      <wsdl:part name="getTrackerListReturn" type="tns1:TrackerSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="TrackerAppSoap">
+
+      <wsdl:operation name="getFields" parameterOrder="sessionId trackerId">
+
+         <wsdl:input message="impl:getFieldsRequest" name="getFieldsRequest"/>
+
+         <wsdl:output message="impl:getFieldsResponse" name="getFieldsResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setField" parameterOrder="sessionId objectId fieldData">
+
+         <wsdl:input message="impl:setFieldRequest" name="setFieldRequest"/>
+
+         <wsdl:output message="impl:setFieldResponse" name="setFieldResponse"/>
+
+         <wsdl:fault message="impl:InvalidOperationFault" name="InvalidOperationFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="moveArtifact" parameterOrder="sessionId artifactId targetFolderId newAssignee">
+
+         <wsdl:input message="impl:moveArtifactRequest" name="moveArtifactRequest"/>
+
+         <wsdl:output message="impl:moveArtifactResponse" name="moveArtifactResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addDateField" parameterOrder="sessionId trackerId fieldName isRequired isDisabled isHiddenOnCreate">
+
+         <wsdl:input message="impl:addDateFieldRequest" name="addDateFieldRequest"/>
+
+         <wsdl:output message="impl:addDateFieldResponse" name="addDateFieldResponse"/>
+
+         <wsdl:fault message="impl:InvalidOperationFault" name="InvalidOperationFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteField" parameterOrder="sessionId objectId fieldId">
+
+         <wsdl:input message="impl:deleteFieldRequest" name="deleteFieldRequest"/>
+
+         <wsdl:output message="impl:deleteFieldResponse" name="deleteFieldResponse"/>
+
+         <wsdl:fault message="impl:InvalidOperationFault" name="InvalidOperationFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTrackerData" parameterOrder="sessionId trackerId">
+
+         <wsdl:input message="impl:getTrackerDataRequest" name="getTrackerDataRequest"/>
+
+         <wsdl:output message="impl:getTrackerDataResponse" name="getTrackerDataResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setTrackerData" parameterOrder="sessionId trackerData">
+
+         <wsdl:input message="impl:setTrackerDataRequest" name="setTrackerDataRequest"/>
+
+         <wsdl:output message="impl:setTrackerDataResponse" name="setTrackerDataResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactData" parameterOrder="sessionId artifactId">
+
+         <wsdl:input message="impl:getArtifactDataRequest" name="getArtifactDataRequest"/>
+
+         <wsdl:output message="impl:getArtifactDataResponse" name="getArtifactDataResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setArtifactData" parameterOrder="sessionId artifactData comment attachmentFileName attachmentMimeType attachmentFileId">
+
+         <wsdl:input message="impl:setArtifactDataRequest" name="setArtifactDataRequest"/>
+
+         <wsdl:output message="impl:setArtifactDataResponse" name="setArtifactDataResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+         <wsdl:fault message="impl:WorkflowViolationFault" name="WorkflowViolationFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="copyWorkflowTransitions" parameterOrder="sessionId srcTrackerId dstTrackerId">
+
+         <wsdl:input message="impl:copyWorkflowTransitionsRequest" name="copyWorkflowTransitionsRequest"/>
+
+         <wsdl:output message="impl:copyWorkflowTransitionsResponse" name="copyWorkflowTransitionsResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:WorkflowViolationFault" name="WorkflowViolationFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createArtifact" parameterOrder="sessionId trackerId title description group category status customer priority estimatedHours assignedUsername releaseId flexFields attachmentFileName attachmentMimeType attachmentFileId">
+
+         <wsdl:input message="impl:createArtifactRequest" name="createArtifactRequest"/>
+
+         <wsdl:output message="impl:createArtifactResponse" name="createArtifactResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteArtifact" parameterOrder="sessionId artifactId">
+
+         <wsdl:input message="impl:deleteArtifactRequest" name="deleteArtifactRequest"/>
+
+         <wsdl:output message="impl:deleteArtifactResponse" name="deleteArtifactResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createTracker" parameterOrder="sessionId projectId trackerName trackerTitle trackerDescription">
+
+         <wsdl:input message="impl:createTrackerRequest" name="createTrackerRequest"/>
+
+         <wsdl:output message="impl:createTrackerResponse" name="createTrackerResponse"/>
+
+         <wsdl:fault message="impl:ObjectAlreadyExistsFault" name="ObjectAlreadyExistsFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTrackerList" parameterOrder="sessionId projectId">
+
+         <wsdl:input message="impl:getTrackerListRequest" name="getTrackerListRequest"/>
+
+         <wsdl:output message="impl:getTrackerListResponse" name="getTrackerListResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setField2" parameterOrder="sessionId objectId fieldData">
+
+         <wsdl:input message="impl:setField2Request" name="setField2Request"/>
+
+         <wsdl:output message="impl:setField2Response" name="setField2Response"/>
+
+         <wsdl:fault message="impl:InvalidOperationFault" name="InvalidOperationFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addTextField" parameterOrder="sessionId trackerId fieldName displayColumns displayLines isRequired isDisabled isHiddenOnCreate defaultValue">
+
+         <wsdl:input message="impl:addTextFieldRequest" name="addTextFieldRequest"/>
+
+         <wsdl:output message="impl:addTextFieldResponse" name="addTextFieldResponse"/>
+
+         <wsdl:fault message="impl:InvalidOperationFault" name="InvalidOperationFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addSingleSelectField" parameterOrder="sessionId trackerId fieldName isRequired isDisabled isHiddenOnCreate fieldValues defaultValue">
+
+         <wsdl:input message="impl:addSingleSelectFieldRequest" name="addSingleSelectFieldRequest"/>
+
+         <wsdl:output message="impl:addSingleSelectFieldResponse" name="addSingleSelectFieldResponse"/>
+
+         <wsdl:fault message="impl:InvalidOperationFault" name="InvalidOperationFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addMultiSelectField" parameterOrder="sessionId trackerId fieldName displayLines isRequired isDisabled isHiddenOnCreate fieldValues defaultValues">
+
+         <wsdl:input message="impl:addMultiSelectFieldRequest" name="addMultiSelectFieldRequest"/>
+
+         <wsdl:output message="impl:addMultiSelectFieldResponse" name="addMultiSelectFieldResponse"/>
+
+         <wsdl:fault message="impl:InvalidOperationFault" name="InvalidOperationFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addUserSelectField" parameterOrder="sessionId trackerId fieldName fieldSize isRequired isDisabled isHiddenOnCreate defaultValues userFilter">
+
+         <wsdl:input message="impl:addUserSelectFieldRequest" name="addUserSelectFieldRequest"/>
+
+         <wsdl:output message="impl:addUserSelectFieldResponse" name="addUserSelectFieldResponse"/>
+
+         <wsdl:fault message="impl:InvalidOperationFault" name="InvalidOperationFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFields2" parameterOrder="sessionId trackerId">
+
+         <wsdl:input message="impl:getFields2Request" name="getFields2Request"/>
+
+         <wsdl:output message="impl:getFields2Response" name="getFields2Response"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactList" parameterOrder="sessionId containerId filters">
+
+         <wsdl:input message="impl:getArtifactListRequest" name="getArtifactListRequest"/>
+
+         <wsdl:output message="impl:getArtifactListResponse" name="getArtifactListResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:InvalidFilterFault" name="InvalidFilterFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactDetailList" parameterOrder="sessionId trackerId filters">
+
+         <wsdl:input message="impl:getArtifactDetailListRequest" name="getArtifactDetailListRequest"/>
+
+         <wsdl:output message="impl:getArtifactDetailListResponse" name="getArtifactDetailListResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:InvalidFilterFault" name="InvalidFilterFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactDetailList2" parameterOrder="sessionId trackerId filters">
+
+         <wsdl:input message="impl:getArtifactDetailList2Request" name="getArtifactDetailList2Request"/>
+
+         <wsdl:output message="impl:getArtifactDetailList2Response" name="getArtifactDetailList2Response"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:InvalidFilterFault" name="InvalidFilterFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findArtifacts" parameterOrder="sessionId queryString projectId searchAttachments">
+
+         <wsdl:input message="impl:findArtifactsRequest" name="findArtifactsRequest"/>
+
+         <wsdl:output message="impl:findArtifactsResponse" name="findArtifactsResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:SearchQuerySyntaxFault" name="SearchQuerySyntaxFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactData2" parameterOrder="sessionId artifactId">
+
+         <wsdl:input message="impl:getArtifactData2Request" name="getArtifactData2Request"/>
+
+         <wsdl:output message="impl:getArtifactData2Response" name="getArtifactData2Response"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setArtifactData2" parameterOrder="sessionId artifactData comment attachmentFileName attachmentMimeType attachmentFileId">
+
+         <wsdl:input message="impl:setArtifactData2Request" name="setArtifactData2Request"/>
+
+         <wsdl:output message="impl:setArtifactData2Response" name="setArtifactData2Response"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+         <wsdl:fault message="impl:WorkflowViolationFault" name="WorkflowViolationFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createArtifact2" parameterOrder="sessionId trackerId title description group category status customer priority estimatedHours assignedUsername releaseId flexFields attachmentFileName attachmentMimeType attachmentFileId">
+
+         <wsdl:input message="impl:createArtifact2Request" name="createArtifact2Request"/>
+
+         <wsdl:output message="impl:createArtifact2Response" name="createArtifact2Response"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="moveArtifact2" parameterOrder="sessionId artifactId targetFolderId newAssignee">
+
+         <wsdl:input message="impl:moveArtifact2Request" name="moveArtifact2Request"/>
+
+         <wsdl:output message="impl:moveArtifact2Response" name="moveArtifact2Response"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAllowedWorkflowTransitionList" parameterOrder="sessionId trackerId">
+
+         <wsdl:input message="impl:getAllowedWorkflowTransitionListRequest" name="getAllowedWorkflowTransitionListRequest"/>
+
+         <wsdl:output message="impl:getAllowedWorkflowTransitionListResponse" name="getAllowedWorkflowTransitionListResponse"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="TrackerAppSoapBinding" type="impl:TrackerAppSoap">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getFields">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getFieldsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getFieldsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setField">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setFieldRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setFieldResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidOperationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="moveArtifact">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="moveArtifactRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="moveArtifactResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addDateField">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addDateFieldRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addDateFieldResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidOperationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteField">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="deleteFieldRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="deleteFieldResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidOperationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTrackerData">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTrackerDataRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTrackerDataResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setTrackerData">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setTrackerDataRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setTrackerDataResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactData">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getArtifactDataRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getArtifactDataResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setArtifactData">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setArtifactDataRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setArtifactDataResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="WorkflowViolationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="WorkflowViolationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="copyWorkflowTransitions">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="copyWorkflowTransitionsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="copyWorkflowTransitionsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="WorkflowViolationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="WorkflowViolationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createArtifact">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createArtifactRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createArtifactResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deleteArtifact">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="deleteArtifactRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="deleteArtifactResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createTracker">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createTrackerRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createTrackerResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="ObjectAlreadyExistsFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="ObjectAlreadyExistsFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTrackerList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTrackerListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTrackerListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setField2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setField2Request">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setField2Response">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidOperationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addTextField">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addTextFieldRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addTextFieldResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidOperationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addSingleSelectField">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addSingleSelectFieldRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addSingleSelectFieldResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidOperationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addMultiSelectField">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addMultiSelectFieldRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addMultiSelectFieldResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidOperationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addUserSelectField">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addUserSelectFieldRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addUserSelectFieldResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidOperationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFields2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getFields2Request">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getFields2Response">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getArtifactListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getArtifactListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidFilterFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidFilterFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactDetailList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getArtifactDetailListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getArtifactDetailListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidFilterFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidFilterFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactDetailList2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getArtifactDetailList2Request">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getArtifactDetailList2Response">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidFilterFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidFilterFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findArtifacts">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findArtifactsRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findArtifactsResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SearchQuerySyntaxFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SearchQuerySyntaxFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getArtifactData2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getArtifactData2Request">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getArtifactData2Response">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setArtifactData2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setArtifactData2Request">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setArtifactData2Response">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="WorkflowViolationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="WorkflowViolationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createArtifact2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createArtifact2Request">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createArtifact2Response">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="moveArtifact2">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="moveArtifact2Request">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="moveArtifact2Response">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAllowedWorkflowTransitionList">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAllowedWorkflowTransitionListRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAllowedWorkflowTransitionListResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="TrackerAppSoapService">
+
+      <wsdl:port binding="impl:TrackerAppSoapBinding" name="TrackerApp">
+
+         <wsdlsoap:address location="http://localhost:8080/sf-soap43/services/TrackerApp"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

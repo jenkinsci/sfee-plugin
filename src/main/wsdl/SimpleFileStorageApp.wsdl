@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://schema.vasoftware.com/sf/soap43/service" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://schema.vasoftware.com/sf/soap43/service" xmlns:intf="http://schema.vasoftware.com/sf/soap43/service" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://schema.vasoftware.com/sf/soap43/type" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema targetNamespace="http://schema.vasoftware.com/sf/soap43/type" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="WebServiceFault">
+    <sequence/>
+   </complexType>
+   <complexType name="InvalidSessionFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="SystemFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="PermissionDeniedFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getSizeResponse">
+
+      <wsdl:part name="getSizeReturn" type="xsd:long"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="PermissionDeniedFault">
+
+      <wsdl:part name="fault" type="tns1:PermissionDeniedFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="startFileUploadResponse">
+
+      <wsdl:part name="startFileUploadReturn" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="SystemFault">
+
+      <wsdl:part name="fault" type="tns1:SystemFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="InvalidSessionFault">
+
+      <wsdl:part name="fault" type="tns1:InvalidSessionFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="endFileUploadRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="fileId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="readRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="fileId" type="xsd:string"/>
+
+      <wsdl:part name="offset" type="xsd:int"/>
+
+      <wsdl:part name="length" type="xsd:int"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="writeResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getSizeRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="fileId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="readResponse">
+
+      <wsdl:part name="readReturn" type="xsd:base64Binary"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="startFileUploadRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="endFileUploadResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="writeRequest">
+
+      <wsdl:part name="sessionId" type="xsd:string"/>
+
+      <wsdl:part name="fileId" type="xsd:string"/>
+
+      <wsdl:part name="data" type="xsd:base64Binary"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="SimpleFileStorageAppSoap">
+
+      <wsdl:operation name="write" parameterOrder="sessionId fileId data">
+
+         <wsdl:input message="impl:writeRequest" name="writeRequest"/>
+
+         <wsdl:output message="impl:writeResponse" name="writeResponse"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getSize" parameterOrder="sessionId fileId">
+
+         <wsdl:input message="impl:getSizeRequest" name="getSizeRequest"/>
+
+         <wsdl:output message="impl:getSizeResponse" name="getSizeResponse"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="read" parameterOrder="sessionId fileId offset length">
+
+         <wsdl:input message="impl:readRequest" name="readRequest"/>
+
+         <wsdl:output message="impl:readResponse" name="readResponse"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="startFileUpload" parameterOrder="sessionId">
+
+         <wsdl:input message="impl:startFileUploadRequest" name="startFileUploadRequest"/>
+
+         <wsdl:output message="impl:startFileUploadResponse" name="startFileUploadResponse"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="endFileUpload" parameterOrder="sessionId fileId">
+
+         <wsdl:input message="impl:endFileUploadRequest" name="endFileUploadRequest"/>
+
+         <wsdl:output message="impl:endFileUploadResponse" name="endFileUploadResponse"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="SimpleFileStorageAppSoapBinding" type="impl:SimpleFileStorageAppSoap">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="write">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="writeRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="writeResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getSize">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getSizeRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getSizeResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="read">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="readRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="readResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="startFileUpload">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="startFileUploadRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="startFileUploadResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="endFileUpload">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="endFileUploadRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="endFileUploadResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="SimpleFileStorageAppSoapService">
+
+      <wsdl:port binding="impl:SimpleFileStorageAppSoapBinding" name="SimpleFileStorageApp">
+
+         <wsdlsoap:address location="http://localhost:8080/sf-soap43/services/SimpleFileStorageApp"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

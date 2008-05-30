@@ -1,0 +1,21 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:entry title="Source Regexp">
+    	<f:textbox name="sourceRegexp" value="${instance.sourceRegexp}"/>
+    </f:entry>
+    <f:entry title="Release Name">
+    	<f:textbox name="releaseName" value="${instance.releaseName}"/>
+    </f:entry>
+    <f:entry title="Release to replace (leave empty if none)">
+    	<f:textbox name="releaseToReplace" value="${instance.releaseToReplace}"/>
+    </f:entry>
+    <f:entry title="Maturity">
+    	<f:textbox name="maturity" value="${instance.maturity}"/>
+    </f:entry>
+    <f:entry title="Upload files">
+    	<f:checkbox name="uploadArtifacts" checked="${instance.uploadArtifacts}"/>
+    </f:entry>
+    <f:entry title="Upload automatically after build">
+    	<f:checkbox name="uploadAutomatically" checked="${instance.uploadAutomatically}"/>
+    </f:entry>
+
+</j:jelly>

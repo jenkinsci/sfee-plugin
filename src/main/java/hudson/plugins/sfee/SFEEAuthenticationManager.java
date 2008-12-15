@@ -1,8 +1,11 @@
 package hudson.plugins.sfee;
 
-import hudson.plugins.sfee.SFEESecurityRealm;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.acegisecurity.Authentication;
 import org.acegisecurity.AuthenticationException;
+import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.providers.dao.AbstractUserDetailsAuthenticationProvider;
 import org.acegisecurity.userdetails.UserDetails;

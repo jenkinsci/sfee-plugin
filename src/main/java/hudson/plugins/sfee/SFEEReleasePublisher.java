@@ -4,7 +4,9 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
+import hudson.model.Run;
 import hudson.plugins.descriptionsetter.DescriptionSetterAction;
+import hudson.security.Permission;
 import hudson.tasks.Publisher;
 
 import java.io.BufferedReader;
@@ -21,6 +23,9 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
 public class SFEEReleasePublisher extends Publisher {
+
+	private static final String REGEXP = ".*\\[INFO\\] Uploading project information for "
+			+ "[^\\s]* ([^\\s]*)";
 
 	private final String releaseToReplace;
 	private final boolean uploadArtifacts = true;
@@ -67,7 +72,7 @@ public class SFEEReleasePublisher extends Publisher {
 			return false;
 		}
 
-		SFEEReleaseTask<AbstractBuild<?, ?>> newReleaseTask = new SFEEReleaseTask<AbstractBuild<?, ?>>(
+		SFEEReleaseTask<AbstractBuild> newReleaseTask = new SFEEReleaseTask<AbstractBuild>(
 				build, releasePackageId, version, releaseToReplace, maturity,
 				uploadArtifacts, replaceArtifacts);
 		build.addAction(newReleaseTask);

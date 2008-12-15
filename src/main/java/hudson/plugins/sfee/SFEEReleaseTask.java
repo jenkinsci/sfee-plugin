@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -42,7 +43,7 @@ import javax.servlet.ServletException;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-public class SFEEReleaseTask<T extends AbstractBuild<?, ?>> extends TaskAction
+public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction
 		implements AccessControlled {
 
 	private final AbstractBuild<?, ?> build;
@@ -162,11 +163,11 @@ public class SFEEReleaseTask<T extends AbstractBuild<?, ?>> extends TaskAction
 		// ----------------------------------
 		boolean doUpload = false;
 
-		List<?> buildArtifacts = build.getArtifacts();
+		List buildArtifacts = build.getArtifacts();
 
-		for (Object element : buildArtifacts) {
+		for (Iterator iterator = buildArtifacts.iterator(); iterator.hasNext();) {
 
-			Run<?, ?>.Artifact buildArtifact = (Run<?, ?>.Artifact) element;
+			Run.Artifact buildArtifact = (Run.Artifact) iterator.next();
 
 			doUpload = "on".equals(req
 					.getParameter(buildArtifact.getFileName()));
@@ -226,10 +227,12 @@ public class SFEEReleaseTask<T extends AbstractBuild<?, ?>> extends TaskAction
 										isReplaceFiles());
 							}
 
-							List<?> buildArtifacts = build.getArtifacts();
+							List buildArtifacts = build.getArtifacts();
 
-							for (Object element : buildArtifacts) {
-								Run<?, ?>.Artifact buildArtifact = (Run<?, ?>.Artifact) element;
+							for (Iterator iterator = buildArtifacts.iterator(); iterator
+									.hasNext();) {
+								Run.Artifact buildArtifact = (Run.Artifact) iterator
+										.next();
 
 								if (getDownloadingArtifactList().get(
 										buildArtifact.getFileName())) {
@@ -284,16 +287,16 @@ public class SFEEReleaseTask<T extends AbstractBuild<?, ?>> extends TaskAction
 		}.start();
 	}
 
-	private static final Adapter<SFEEReleaseTask<?>.Record> ADAPTER = new Adapter<SFEEReleaseTask<?>.Record>() {
-		public int compare(SFEEReleaseTask<?>.Record record, String key) {
+	private static final Adapter<SFEEReleaseTask.Record> ADAPTER = new Adapter<SFEEReleaseTask.Record>() {
+		public int compare(SFEEReleaseTask.Record record, String key) {
 			return record.getNumber() - Integer.parseInt(key);
 		}
 
-		public String getKey(SFEEReleaseTask<?>.Record record) {
+		public String getKey(SFEEReleaseTask.Record record) {
 			return String.valueOf(record.getNumber());
 		}
 
-		public boolean isBuilding(SFEEReleaseTask<?>.Record record) {
+		public boolean isBuilding(SFEEReleaseTask.Record record) {
 			return record.isBuilding();
 		}
 
@@ -544,11 +547,12 @@ public class SFEEReleaseTask<T extends AbstractBuild<?, ?>> extends TaskAction
 		if (downloadingArtifactList == null) {
 			downloadingArtifactList = new HashMap<String, Boolean>();
 
-			List<?> buildArtifacts = build.getArtifacts();
+			List buildArtifacts = build.getArtifacts();
 
-			for (Object element : buildArtifacts) {
+			for (Iterator iterator = buildArtifacts.iterator(); iterator
+					.hasNext();) {
 
-				Run<?, ?>.Artifact buildArtifact = (Run<?, ?>.Artifact) element;
+				Run.Artifact buildArtifact = (Run.Artifact) iterator.next();
 
 				System.out.println("Adding new artifact: "
 						+ buildArtifact.getFileName());

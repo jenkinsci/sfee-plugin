@@ -1,0 +1,21 @@
+<div>
+  <p>
+    The regular expression will be applied to build log and 
+    result will be applied to release name.
+    
+    Eg.     
+    If in the build log there is string like
+
+    MyProject Revision: MP-1-0.0
+    
+    and regexp is:
+    .*MyProject Revision: ([^\\s]*)
+    
+    and Release Name is:
+    
+    \1
+    
+    The resulting Release Name will be:
+    MP-1-0.0    
+</p>
+</div>

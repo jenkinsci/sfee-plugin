@@ -23,15 +23,16 @@ public class SFEEUserDetailsService implements UserDetailsService {
 		SourceForgeSite site = SourceForgeSite.DESCRIPTOR.getSite();
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 		authorities.add(new GrantedAuthorityImpl("authenticated"));
-		
+
 		String password = SFEESecurityRealm.DESCRIPTOR.getPassword(username);
 		if (password == null) {
-			throw new UsernameNotFoundException("Password not known for this user - please login");
+			throw new UsernameNotFoundException(
+					"Password not known for this user - please login");
 		}
-		
+
 		try {
 			String sessionId = site.createSession(username, password);
-			
+
 			UserSoapDO userDetails = site.getUserDetails(username);
 			if (userDetails.isSuperUser()) {
 				authorities.add(new GrantedAuthorityImpl("admin"));
@@ -42,10 +43,10 @@ public class SFEEUserDetailsService implements UserDetailsService {
 			}
 
 			GrantedAuthority[] authoritiesArray = (GrantedAuthority[]) authorities
-					.toArray(new GrantedAuthority[authorities
-					.size()]);
-			
-			return new User(username, password, true, true, true, true, authoritiesArray);
+					.toArray(new GrantedAuthority[authorities.size()]);
+
+			return new User(username, password, true, true, true, true,
+					authoritiesArray);
 		} catch (BadCredentialsException e) {
 			throw e;
 		} catch (Exception e) {

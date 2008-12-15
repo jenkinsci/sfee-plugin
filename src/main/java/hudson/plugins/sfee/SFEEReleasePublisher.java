@@ -4,7 +4,9 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
+import hudson.model.Run;
 import hudson.plugins.descriptionsetter.DescriptionSetterAction;
+import hudson.security.Permission;
 import hudson.tasks.Publisher;
 
 import java.io.BufferedReader;
@@ -26,21 +28,26 @@ public class SFEEReleasePublisher extends Publisher {
 			+ "[^\\s]* ([^\\s]*)";
 
 	private final String releaseToReplace;
-	private final boolean uploadArtifacts;
+	private final boolean uploadArtifacts = true;
 	private final String maturity;
 	private final boolean uploadAutomatically;
+	private final boolean replaceArtifacts;
 
 	private final String sourceRegexp;
 
 	private final String releaseName;
 
 	@DataBoundConstructor
-	public SFEEReleasePublisher(String sourceRegexp, String releaseName, String releaseToReplace, String maturity,
-			boolean uploadArtifacts, boolean uploadAutomatically) {
-		this.releaseToReplace = StringUtils.isBlank(releaseToReplace) ? null : releaseToReplace.trim();
-		this.uploadArtifacts = uploadArtifacts;
+	public SFEEReleasePublisher(String sourceRegexp, String releaseName,
+			String releaseToReplace, String maturity,
+			/* boolean uploadArtifacts, */boolean replaceArtifacts,
+			boolean uploadAutomatically) {
+		this.releaseToReplace = StringUtils.isBlank(releaseToReplace) ? null
+				: releaseToReplace.trim();
+		/* this.uploadArtifacts = uploadArtifacts; */
+		this.replaceArtifacts = replaceArtifacts;
 		this.maturity = maturity;
-		this.uploadAutomatically= uploadAutomatically;
+		this.uploadAutomatically = uploadAutomatically;
 		this.sourceRegexp = sourceRegexp;
 		this.releaseName = releaseName;
 	}
@@ -59,15 +66,17 @@ public class SFEEReleasePublisher extends Publisher {
 		SourceForgeProject project = build.getProject().getProperty(
 				SourceForgeProject.class);
 		String releasePackageId = project.getReleasePackageId();
-		
+
 		if (releasePackageId == null) {
 			listener.fatalError("SFEE Publisher: No release package set");
 			return false;
 		}
-		
-		SFEEReleaseTask<AbstractBuild> newReleaseTask = new SFEEReleaseTask<AbstractBuild>(build, releasePackageId, version, releaseToReplace, maturity, uploadArtifacts);
+
+		SFEEReleaseTask<AbstractBuild> newReleaseTask = new SFEEReleaseTask<AbstractBuild>(
+				build, releasePackageId, version, releaseToReplace, maturity,
+				uploadArtifacts, replaceArtifacts);
 		build.addAction(newReleaseTask);
-		
+
 		if (uploadAutomatically) {
 			newReleaseTask.startUpload();
 		}
@@ -138,6 +147,10 @@ public class SFEEReleasePublisher extends Publisher {
 
 	public boolean isUploadArtifacts() {
 		return uploadArtifacts;
+	}
+
+	public boolean isReplaceArtifacts() {
+		return replaceArtifacts;
 	}
 
 	public String getMaturity() {

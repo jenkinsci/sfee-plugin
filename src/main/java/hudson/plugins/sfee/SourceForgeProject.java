@@ -84,7 +84,8 @@ public class SourceForgeProject extends JobProperty<AbstractProject<?, ?>> {
 			if (NONE.equals(result.getProjectId())) {
 				return null;
 			} else {
-				if (!Hudson.getInstance().getACL().hasPermission(Hudson.ADMINISTER)) {
+				if (!Hudson.getInstance().getACL().hasPermission(
+						Hudson.ADMINISTER)) {
 					Authentication auth = Hudson.getAuthentication();
 					GrantedAuthority[] authorities = auth.getAuthorities();
 					boolean found = false;
@@ -94,7 +95,7 @@ public class SourceForgeProject extends JobProperty<AbstractProject<?, ?>> {
 					}
 					if (!found) {
 						throw new AccessDeniedException(
-						"Cannot change associated SFEE project. You would not have access!");
+								"Cannot change associated SFEE project. You would not have access!");
 					}
 				}
 				return result;
@@ -120,8 +121,7 @@ public class SourceForgeProject extends JobProperty<AbstractProject<?, ?>> {
 			if (site == null) {
 				return Collections.emptyList();
 			}
-			ProjectSoapRow[] projects = site
-					.getProjects();
+			ProjectSoapRow[] projects = site.getProjects();
 			Collection<ListBoxModel.Option> result = new TreeSet<ListBoxModel.Option>(
 					new Comparator<ListBoxModel.Option>() {
 						public int compare(Option o1, Option o2) {

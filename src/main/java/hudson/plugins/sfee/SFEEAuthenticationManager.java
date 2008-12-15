@@ -1,7 +1,11 @@
 package hudson.plugins.sfee;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.acegisecurity.Authentication;
 import org.acegisecurity.AuthenticationException;
+import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.providers.dao.AbstractUserDetailsAuthenticationProvider;
 import org.acegisecurity.userdetails.UserDetails;
@@ -35,11 +39,4 @@ public class SFEEAuthenticationManager extends
 
 	}
 
-	@Override
-	protected Authentication createSuccessAuthentication(Object principal,
-			Authentication authentication, UserDetails user) {
-		return super.createSuccessAuthentication(principal, authentication,
-				user);
-	}
-	
 }

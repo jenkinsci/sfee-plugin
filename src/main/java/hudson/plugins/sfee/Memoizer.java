@@ -55,14 +55,16 @@ public class Memoizer<A, V> implements Computable<A, V> {
 		}
 	}
 
-	private static class ExpiringFutureTask<V>  extends FutureTask<V> {
+	private static class ExpiringFutureTask<V> extends FutureTask<V> {
 		private long creationTime = System.currentTimeMillis();
+
 		public ExpiringFutureTask(Callable<V> callable) {
 			super(callable);
 		}
+
 		public boolean hasExpired() {
 			return System.currentTimeMillis() - creationTime > 60000;
 		}
 	}
-	
+
 }

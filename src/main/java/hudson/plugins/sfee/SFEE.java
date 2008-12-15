@@ -90,19 +90,22 @@ public class SFEE {
 		}
 	}
 
-	
 	public static void main(String[] args) throws Exception {
-		System.setProperty(SAXParserFactory.class.getName(), SAXParserFactoryImpl.class.getName());
+		System.setProperty(SAXParserFactory.class.getName(),
+				SAXParserFactoryImpl.class.getName());
 		String id = createSession("oasis.mitra.com", "awpyv", "SDF5422");
-		RbacAppSoap rbac = getSourceForgeApp("oasis.mitra.com", RbacAppSoap.class);
-		
+		RbacAppSoap rbac = getSourceForgeApp("oasis.mitra.com",
+				RbacAppSoap.class);
+
 		RoleSoapList userRoleList = rbac.getUserRoleList(id, "proj1058", "bob");
 		for (RoleSoapRow role : userRoleList.getDataRows()) {
 			System.out.println(role.getTitle());
-			
-			RoleClusterSoapList listClusters = rbac.listClusters(id, role.getId());
-			for (RoleClusterSoapRow cluster: listClusters.getDataRows()) {
-				System.out.println(cluster.getFolderId() + " " + cluster.getOperationClusterName());
+
+			RoleClusterSoapList listClusters = rbac.listClusters(id, role
+					.getId());
+			for (RoleClusterSoapRow cluster : listClusters.getDataRows()) {
+				System.out.println(cluster.getFolderId() + " "
+						+ cluster.getOperationClusterName());
 			}
 		}
 	}

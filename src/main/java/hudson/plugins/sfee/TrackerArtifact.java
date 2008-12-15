@@ -6,16 +6,17 @@ public class TrackerArtifact {
 
 	private final String id, projectId, title, description;
 
-	public TrackerArtifact(String id, String description,
-			String projectId, String title) {
+	public TrackerArtifact(String id, String description, String projectId,
+			String title) {
 		this.id = id;
 		this.description = description;
 		this.projectId = projectId;
 		this.title = title;
 	}
-	
+
 	public TrackerArtifact(ArtifactDetailSoapRow row) {
-		this(row.getId(), row.getProjectId(), row.getDescription(), row.getTitle());
+		this(row.getId(), row.getProjectId(), row.getDescription(), row
+				.getTitle());
 	}
 
 	public String getId() {
@@ -33,7 +34,7 @@ public class TrackerArtifact {
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public String getURL() {
 		return SourceForgeSite.DESCRIPTOR.getSite().getURL(id);
 	}

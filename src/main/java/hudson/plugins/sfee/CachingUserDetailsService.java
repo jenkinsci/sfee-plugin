@@ -1,16 +1,20 @@
 package hudson.plugins.sfee;
 
+import hudson.plugins.sfee.Computable;
+import hudson.plugins.sfee.Memoizer;
+
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UserDetailsService;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataRetrievalFailureException;
 
-public class CachingUserDetailsService implements UserDetailsService, Computable<String,UserDetails> {
+public class CachingUserDetailsService implements UserDetailsService,
+		Computable<String, UserDetails> {
 
 	private Memoizer<String, UserDetails> memoizer;
 	private UserDetailsService service;
-	
+
 	public CachingUserDetailsService(UserDetailsService service) {
 		this.service = service;
 
@@ -29,7 +33,5 @@ public class CachingUserDetailsService implements UserDetailsService, Computable
 	public UserDetails compute(String arg) throws InterruptedException {
 		return service.loadUserByUsername(arg);
 	}
-	
-	
-	
+
 }

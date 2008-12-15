@@ -10,22 +10,22 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 /**
  * Resolves email addresses from SFEE IDs.
  * 
  * @TODO sane caching
- *
+ * 
  */
 public class SFEEMailAddressResolver {
-	
-	private static Logger log = Logger.getLogger(SFEEMailAddressResolver.class.getName());
+
+	private static Logger log = Logger.getLogger(SFEEMailAddressResolver.class
+			.getName());
 
 	private static String UNKNOWN = "unknown";
-	
+
 	private final Map<String, String> emails = new HashMap<String, String>();
 	private final Map<String, String> names = new HashMap<String, String>();
-	
+
 	private final MailAddressResolver mailAddressResolver = new MailAddressResolver() {
 		@Override
 		public synchronized String findMailAddressFor(User u) {
@@ -44,7 +44,7 @@ public class SFEEMailAddressResolver {
 			}
 		}
 	};
-	
+
 	private final UserNameResolver userNameResolver = new UserNameResolver() {
 		@Override
 		public synchronized String findNameFor(User u) {
@@ -63,7 +63,7 @@ public class SFEEMailAddressResolver {
 			}
 		}
 	};
-	
+
 	public SFEEMailAddressResolver() {
 		update();
 	}
@@ -73,7 +73,7 @@ public class SFEEMailAddressResolver {
 			SourceForgeSite site = SourceForgeSite.DESCRIPTOR.getSite();
 			if (site != null) {
 				UserSoapRow[] users = site.getUsers();
-				for (UserSoapRow user: users) {
+				for (UserSoapRow user : users) {
 					emails.put(user.getUserName(), user.getEmail());
 					names.put(user.getUserName(), user.getFullName());
 				}
@@ -90,5 +90,5 @@ public class SFEEMailAddressResolver {
 	public UserNameResolver getUserNameResolver() {
 		return userNameResolver;
 	}
-	
+
 }

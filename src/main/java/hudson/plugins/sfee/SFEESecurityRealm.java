@@ -26,7 +26,8 @@ public class SFEESecurityRealm extends SecurityRealm {
 	@Override
 	public SecurityComponents createSecurityComponents() {
 		ProviderManager manager = new ProviderManager();
-		UserDetailsService userDetailsService = new CachingUserDetailsService(new SFEEUserDetailsService());
+		UserDetailsService userDetailsService = new CachingUserDetailsService(
+				new SFEEUserDetailsService());
 		RememberMeAuthenticationProvider rememberMeAuthenticationProvider = new RememberMeAuthenticationProvider();
 		rememberMeAuthenticationProvider.setKey(Hudson.getInstance()
 				.getSecretKey());

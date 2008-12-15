@@ -6,6 +6,7 @@ import hudson.model.AbstractProject;
 import hudson.model.BallColor;
 import hudson.model.LargeText;
 import hudson.model.Result;
+import hudson.model.Run;
 import hudson.model.TaskAction;
 import hudson.model.TaskListener;
 import hudson.model.TaskThread;
@@ -17,6 +18,7 @@ import hudson.plugins.sfee.webservice.NoSuchObjectFault;
 import hudson.plugins.sfee.webservice.PermissionDeniedFault;
 import hudson.plugins.sfee.webservice.SystemFault;
 import hudson.security.ACL;
+import hudson.security.AccessControlled;
 import hudson.security.Permission;
 import hudson.util.Iterators;
 import hudson.widgets.HistoryWidget;
@@ -28,15 +30,21 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.servlet.ServletException;
 
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
+public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction
+		implements AccessControlled {
 
 	private final AbstractBuild<?, ?> build;
 
@@ -47,38 +55,55 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 	private List<TrackerArtifact> resolvedTrackerArtifacts;
 
 	private final boolean uploadFiles;
+	private final boolean replaceFiles;
+
+	private boolean uploadBuildLog;
+	private Map<String, Boolean> downloadingArtifactList = null;
 
 	public SFEEReleaseTask(AbstractBuild<?, ?> build, String releasePackageId,
 			String releaseName, String releaseToReplace, String maturity,
-			boolean uploadFiles) {
+			boolean uploadFiles, boolean replaceFiles) {
 		this.build = build;
 		this.releasePackageId = releasePackageId;
 		this.releaseName = releaseName;
 		this.releaseToReplace = releaseToReplace;
 		this.maturity = maturity;
 		this.uploadFiles = uploadFiles;
+		this.replaceFiles = replaceFiles;
 	}
 
 	@Override
-	protected ACL getACL() {
+	public ACL getACL() {
 		return build.getACL();
 	}
 
 	@Override
 	protected Permission getPermission() {
-		return Permission.WRITE;
+		return PluginImpl.PUBLISH;
 	}
 
 	public String getDisplayName() {
-		return "SourceForge";
+		if (hasPermission(getPermission())) {
+			return "SourceForge";
+		} else {
+			return null;
+		}
 	}
 
 	public String getIconFileName() {
-		return isCompleted() ? "star-gold.gif" : "star.gif";
+		if (hasPermission(getPermission())) {
+			return isCompleted() ? "star-gold.gif" : "star.gif";
+		} else {
+			return null;
+		}
 	}
 
 	public String getUrlName() {
-		return "upload";
+		if (hasPermission(getPermission())) {
+			return "upload";
+		} else {
+			return null;
+		}
 	}
 
 	public boolean isCompleted() {
@@ -99,9 +124,14 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 
 	public Object getDynamic(String token, StaplerRequest req,
 			StaplerResponse rsp) {
-		if (token.equals("buildHistory")) {
+		if ("buildHistory".equals(token)) {
 			return getHistoryWidget();
 		}
+
+		if ("buildTimeTrend".equals(token)) {
+			return null;
+		}
+
 		return records.get(Integer.valueOf(token));
 	}
 
@@ -123,6 +153,29 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 			throws ServletException, IOException {
 		getACL().checkPermission(getPermission());
 
+		// ----------------------------------
+		// Check upload of build log
+		// ----------------------------------
+		uploadBuildLog = "on".equals(req.getParameter("uploadBuildLog"));
+
+		// ----------------------------------
+		// Set which artifact to upload
+		// ----------------------------------
+		boolean doUpload = false;
+
+		List buildArtifacts = build.getArtifacts();
+
+		for (Iterator iterator = buildArtifacts.iterator(); iterator.hasNext();) {
+
+			Run.Artifact buildArtifact = (Run.Artifact) iterator.next();
+
+			doUpload = "on".equals(req
+					.getParameter(buildArtifact.getFileName()));
+
+			getDownloadingArtifactList().put(buildArtifact.getFileName(),
+					doUpload);
+		}
+
 		startUpload();
 
 		rsp.sendRedirect(".");
@@ -143,12 +196,66 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 							.getSite();
 
 					if (fileReleaseId == null) {
+
 						fileReleaseId = createOrUpdateRelease(listener,
 								releaseName, releaseToReplace,
 								releasePackageId, maturity);
 						if (fileReleaseId == null) {
 							record.result = Result.FAILURE;
 							return;
+						}
+
+						if (isUploadFiles()) {
+							listener.getLogger().println(
+									"Existing files will "
+											+ (isReplaceFiles() ? "" : "not")
+											+ " be overwitten");
+
+							if (isUploadBuildLog()) {
+								String logFileName = releaseName + "-"
+										+ build.getParent().getDisplayName()
+										+ "-" + build.getNumber() + "-"
+										+ build.getId() + ".log";
+								listener.getLogger().println(
+										"Uploading build log file "
+												+ logFileName + "...");
+
+								site.uploadFileForRelease(fileReleaseId,
+										logFileName, new DataHandler(
+												new FileDataSource(build
+														.getLogFile())),
+										isReplaceFiles());
+							}
+
+							List buildArtifacts = build.getArtifacts();
+
+							for (Iterator iterator = buildArtifacts.iterator(); iterator
+									.hasNext();) {
+								Run.Artifact buildArtifact = (Run.Artifact) iterator
+										.next();
+
+								if (getDownloadingArtifactList().get(
+										buildArtifact.getFileName())) {
+									listener.getLogger().print(
+											"Uploading file "
+													+ buildArtifact
+															.getFileName()
+													+ " ...");
+
+									site.uploadFileForRelease(fileReleaseId,
+											buildArtifact.getFileName(),
+											buildArtifact.getFile().toURL(),
+											isReplaceFiles());
+
+									listener.getLogger().println(
+											" upload successfully completed!");
+								} else {
+									listener.getLogger().println(
+											"Skipping unselected file "
+													+ buildArtifact
+															.getFileName());
+								}
+							}
 						}
 					} else {
 						listener.getLogger().println(
@@ -163,7 +270,7 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 					listener.getLogger().println(
 							"Total time: " + Util.getTimeSpanString(duration));
 
-					record.result = Result.UNSTABLE;
+					record.result = Result.SUCCESS;
 
 					build.addAction(new SFEEReleaseCompletedTask(
 							SFEEReleaseTask.this));
@@ -300,10 +407,12 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 			SystemFault, PermissionDeniedFault, RemoteException {
 		final SourceForgeSite site = SourceForgeSite.DESCRIPTOR.getSite();
 
-		final String releaseId;
+		String releaseId = null;
+
 		if (releaseToReplace != null) {
-			listener.getLogger().printf("Update release '%s' to '%s'\n...",
-					releaseToReplace, releaseName);
+			listener.getLogger().printf(
+					"Update release from '%s' to '%s'\n...", releaseToReplace,
+					releaseName);
 			// update old release
 			releaseId = site.updateReleaseName(packageId, releaseToReplace,
 					releaseName);
@@ -319,9 +428,18 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 					maturity);
 		} else {
 			// create release
-			listener.getLogger().printf("Creating release '%s'\n", releaseName);
-			releaseId = site.createRelease(packageId, releaseName, "",
-					"active", maturity);
+			listener.getLogger().printf("Checking for existing release\n",
+					releaseName);
+
+			releaseId = site.getReleaseId(packageId, releaseName);
+
+			if (releaseId == null) {
+				listener.getLogger().printf("Creating new release '%s'\n",
+						releaseName);
+
+				releaseId = site.createRelease(packageId, releaseName, "",
+						"active", maturity);
+			}
 		}
 
 		return releaseId;
@@ -334,13 +452,19 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 			SystemFault, PermissionDeniedFault, RemoteException {
 		SourceForgeProject project = SourceForgeProject.getProperty(p);
 		SourceForgeSite site = SourceForgeSite.DESCRIPTOR.getSite();
+
 		List<ArtifactDetailSoapRow> findArtifactsResolvedInRelease = site
 				.findArtifactsResolvedInRelease(releaseName, project
 						.getProjectId());
+
 		List<TrackerArtifact> trackerArtifacts = new ArrayList<TrackerArtifact>();
 		for (ArtifactDetailSoapRow r : findArtifactsResolvedInRelease) {
+			System.out.println("Adding new TrackerArtifact");
 			trackerArtifacts.add(new TrackerArtifact(r));
 		}
+
+		System.out.println("TrackerArtifact size: " + trackerArtifacts.size());
+
 		return trackerArtifacts;
 	}
 
@@ -365,11 +489,21 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 	}
 
 	public List<TrackerArtifact> getResolvedTrackerArtifacts() {
+		try {
+			resolvedTrackerArtifacts = findResolvedArtifacts(
+					build.getProject(), releaseName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return resolvedTrackerArtifacts;
 	}
 
 	public boolean isUploadFiles() {
 		return uploadFiles;
+	}
+
+	public boolean isReplaceFiles() {
+		return replaceFiles;
 	}
 
 	public CopyOnWriteArrayList<Record> getRecords() {
@@ -385,6 +519,14 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 				.getURL(fileReleaseId) : null;
 	}
 
+	public boolean isUploadBuildLog() {
+		return uploadBuildLog;
+	}
+
+	public void setUploadBuildLog(boolean uploadBuildLog) {
+		this.uploadBuildLog = uploadBuildLog;
+	}
+
 	public void doStop(StaplerRequest req, StaplerResponse rsp)
 			throws IOException {
 		if (workerThread != null) {
@@ -394,6 +536,39 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction {
 	}
 
 	protected void onComplete() {
+	}
+
+	public void setDownloadingArtifactList(
+			Map<String, Boolean> downloadingArtifactList) {
+		this.downloadingArtifactList = downloadingArtifactList;
+	}
+
+	public Map<String, Boolean> getDownloadingArtifactList() {
+		if (downloadingArtifactList == null) {
+			downloadingArtifactList = new HashMap<String, Boolean>();
+
+			List buildArtifacts = build.getArtifacts();
+
+			for (Iterator iterator = buildArtifacts.iterator(); iterator
+					.hasNext();) {
+
+				Run.Artifact buildArtifact = (Run.Artifact) iterator.next();
+
+				System.out.println("Adding new artifact: "
+						+ buildArtifact.getFileName());
+				downloadingArtifactList.put(buildArtifact.getFileName(),
+						Boolean.TRUE);
+			}
+		}
+		return downloadingArtifactList;
+	}
+
+	public void checkPermission(Permission permission) {
+		getACL().checkPermission(permission);
+	}
+
+	public boolean hasPermission(Permission permission) {
+		return getACL().hasPermission(permission);
 	}
 
 }

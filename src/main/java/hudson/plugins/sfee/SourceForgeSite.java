@@ -11,6 +11,8 @@ import hudson.plugins.sfee.webservice.ArtifactDetailSoapRow;
 import hudson.plugins.sfee.webservice.FileStorageAppSoap;
 import hudson.plugins.sfee.webservice.FrsAppSoap;
 import hudson.plugins.sfee.webservice.FrsFileSoapDO;
+import hudson.plugins.sfee.webservice.FrsFileSoapList;
+import hudson.plugins.sfee.webservice.FrsFileSoapRow;
 import hudson.plugins.sfee.webservice.IllegalArgumentFault;
 import hudson.plugins.sfee.webservice.InvalidFilterFault;
 import hudson.plugins.sfee.webservice.InvalidSessionFault;
@@ -18,12 +20,9 @@ import hudson.plugins.sfee.webservice.NoSuchObjectFault;
 import hudson.plugins.sfee.webservice.PackageSoapRow;
 import hudson.plugins.sfee.webservice.PermissionDeniedFault;
 import hudson.plugins.sfee.webservice.ProjectSoapRow;
-import hudson.plugins.sfee.webservice.RbacAppSoap;
 import hudson.plugins.sfee.webservice.ReleaseSoapDO;
 import hudson.plugins.sfee.webservice.ReleaseSoapList;
 import hudson.plugins.sfee.webservice.ReleaseSoapRow;
-import hudson.plugins.sfee.webservice.RoleSoapList;
-import hudson.plugins.sfee.webservice.RoleSoapRow;
 import hudson.plugins.sfee.webservice.SearchQuerySyntaxFault;
 import hudson.plugins.sfee.webservice.SourceForgeSoap;
 import hudson.plugins.sfee.webservice.SystemFault;
@@ -40,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.activation.DataHandler;
-import javax.activation.URLDataSource;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
@@ -116,7 +114,7 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 			sessionId = SFEE.createSession(site, userName, password);
 			lastSessionRequest = System.currentTimeMillis();
 		}
-		
+
 		return sessionId;
 	}
 
@@ -218,16 +216,50 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 		return null;
 	}
 
+	/**
+	 * Updates the title of the release with the given name.
+	 * 
+	 * @return the id of the release that was changed, or null is no such
+	 *         release
+	 * @throws RemoteException
+	 * @throws PermissionDeniedFault
+	 * @throws SystemFault
+	 * @throws InvalidSessionFault
+	 * @throws NoSuchObjectFault
+	 */
+	public String getReleaseId(String packageId, String name)
+			throws NoSuchObjectFault, InvalidSessionFault, SystemFault,
+			PermissionDeniedFault, RemoteException {
+		String releaseId = null;
+		FrsAppSoap frsApp = getFrsApp();
+		String sessionId = getSessionId();
+
+		ReleaseSoapList existingReleases = frsApp.getReleaseList(sessionId,
+				packageId);
+
+		for (ReleaseSoapRow row : existingReleases.getDataRows()) {
+			if (name.equals(row.getTitle())) {
+				releaseId = row.getId();
+				break;
+			}
+		}
+
+		return releaseId;
+	}
+
 	public List<ArtifactDetailSoapRow> findArtifactsResolvedInRelease(
 			String releaseTitle, String projectId) throws InvalidFilterFault,
 			NoSuchObjectFault, InvalidSessionFault, SystemFault,
 			PermissionDeniedFault, RemoteException {
 		List<ArtifactDetailSoapRow> result = new ArrayList<ArtifactDetailSoapRow>();
 		String sessionId = getSessionId();
+
 		TrackerAppSoap trackerApp = getTrackerApp();
+
 		for (TrackerSoapRow trackerRow : getTrackers(projectId)) {
 			ArtifactDetailSoapList artifactDetailList = trackerApp
 					.getArtifactDetailList(sessionId, trackerRow.getId(), null);
+
 			for (ArtifactDetailSoapRow row : artifactDetailList.getDataRows()) {
 				if (releaseTitle.equals(row.getResolvedInReleaseTitle())) {
 					result.add(row);
@@ -249,17 +281,50 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 		return release.getId();
 	}
 
+	public String getFrsId(String releaseId, String fileName)
+			throws InvalidSessionFault, SystemFault, RemoteException {
+		String ret = null;
+		String sessionId = getSessionId();
+		FrsAppSoap frsApp = getFrsApp();
+
+		FrsFileSoapList fileSoapList = frsApp.getFrsFileList(sessionId,
+				releaseId);
+
+		for (FrsFileSoapRow row : fileSoapList.getDataRows()) {
+			if (fileName.equals(row.getFilename())) {
+				ret = row.getId();
+				break;
+			}
+		}
+
+		return ret;
+	}
+
 	public String uploadFileForRelease(String releaseId, String name,
-			URL sourceURL) throws InvalidSessionFault, SystemFault,
-			RemoteException {
+			URL sourceURL, boolean forceUpdate) throws InvalidSessionFault,
+			SystemFault, RemoteException {
+		return uploadFileForRelease(releaseId, name,
+				new DataHandler(sourceURL), forceUpdate);
+	}
+
+	public String uploadFileForRelease(String releaseId, String name,
+			DataHandler dataHandler, boolean forceUpdate)
+			throws InvalidSessionFault, SystemFault, RemoteException {
 		String sessionId = getSessionId();
 		FileStorageAppSoap fileApp = getFileStorageApp();
-		DataHandler dataHandler = new DataHandler(new URLDataSource(sourceURL));
 		String fileId = fileApp.uploadFile(sessionId, dataHandler);
-		FrsFileSoapDO frsFile = frsApp.createFrsFile(sessionId, releaseId,
+
+		if (forceUpdate) {
+			String frsId = getFrsId(releaseId, name);
+
+			if (frsId != null) {
+				getFrsApp().deleteFrsFile(sessionId, frsId);
+			}
+		}
+
+		FrsFileSoapDO frsFile = getFrsApp().createFrsFile(sessionId, releaseId,
 				name, dataHandler.getContentType(), fileId);
 		return frsFile.getId();
-
 	}
 
 	public PackageSoapRow[] getReleasePackages(String projectId)
@@ -322,7 +387,9 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 		return getSfApp().getUserProjectList(sessionId).getDataRows();
 	}
 
-	public void updateRelease(String releaseId, String maturity, String status) throws NoSuchObjectFault, InvalidSessionFault, SystemFault, PermissionDeniedFault, RemoteException {
+	public void updateRelease(String releaseId, String maturity, String status)
+			throws NoSuchObjectFault, InvalidSessionFault, SystemFault,
+			PermissionDeniedFault, RemoteException {
 		FrsAppSoap frsApp = getFrsApp();
 		String sessionId = getSessionId();
 		ReleaseSoapDO releaseData = frsApp.getReleaseData(sessionId, releaseId);
@@ -335,7 +402,9 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 		frsApp.setReleaseData(sessionId, releaseData);
 	}
 
-	public void obsoleteRelease(String releaseId) throws VersionMismatchFault, IllegalArgumentFault, NoSuchObjectFault, InvalidSessionFault, SystemFault, PermissionDeniedFault, RemoteException {
+	public void obsoleteRelease(String releaseId) throws VersionMismatchFault,
+			IllegalArgumentFault, NoSuchObjectFault, InvalidSessionFault,
+			SystemFault, PermissionDeniedFault, RemoteException {
 		FrsAppSoap frsApp = getFrsApp();
 		String sessionId = getSessionId();
 		ReleaseSoapDO releaseData = frsApp.getReleaseData(sessionId, releaseId);
@@ -343,5 +412,5 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 		releaseData.setTitle("[obsolete] " + releaseData.getTitle());
 		frsApp.setReleaseData(sessionId, releaseData);
 	}
-	
+
 }

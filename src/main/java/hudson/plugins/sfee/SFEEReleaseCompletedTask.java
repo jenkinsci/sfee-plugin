@@ -6,7 +6,7 @@ import hudson.model.ProminentProjectAction;
 public class SFEEReleaseCompletedTask implements ProminentProjectAction,
 		BuildBadgeAction {
 
-	private final SFEEReleaseTask releaseTask;
+	private final SFEEReleaseTask<?> releaseTask;
 
 	public SFEEReleaseCompletedTask(SFEEReleaseTask<?> releaseTask) {
 		this.releaseTask = releaseTask;
@@ -30,7 +30,7 @@ public class SFEEReleaseCompletedTask implements ProminentProjectAction,
 		return releaseTask.getFileReleaseUrl();
 	}
 
-	public SFEEReleaseTask getReleaseTask() {
+	public SFEEReleaseTask<?> getReleaseTask() {
 		return releaseTask;
 	}
 

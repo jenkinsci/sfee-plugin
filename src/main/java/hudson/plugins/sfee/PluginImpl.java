@@ -1,7 +1,6 @@
 package hudson.plugins.sfee;
 
 import hudson.Plugin;
-import hudson.model.Job;
 import hudson.model.Jobs;
 import hudson.model.Run;
 import hudson.plugins.sfee.webservice.PackageSoapRow;
@@ -29,13 +28,13 @@ public class PluginImpl extends Plugin {
 	private LinkAnnotator annotator = new LinkAnnotator();
 
 	public static Permission PUBLISH;
-	
+
 	static {
 		PUBLISH = new Permission(Run.PERMISSIONS, Messages
 				.Run_Permissions_Publish(), Messages
 				._Run_PublishPermission_Description(), Permission.FULL_CONTROL);
 	}
-		
+
 	public void start() throws Exception {
 		Jobs.PROPERTIES.add(SourceForgeProject.DescriptorImpl.INSTANCE);
 		Jobs.PROPERTIES.add(SourceForgeSite.DESCRIPTOR);

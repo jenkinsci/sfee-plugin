@@ -21,8 +21,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.acegisecurity.AuthenticationServiceException;
 import org.acegisecurity.BadCredentialsException;
 import org.apache.axis.AxisFault;
-
-import com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl;
+import org.apache.xerces.jaxp.SAXParserFactoryImpl;
 
 public class SFEE {
 

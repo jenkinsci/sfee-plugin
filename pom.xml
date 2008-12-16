@@ -15,7 +15,6 @@
   <packaging>hpi</packaging>
   <name>SFEE Plugin</name>
   <version>1.0.2-SNAPSHOT</version>
-  <name>Hudson SourceForge Enterprise Edition plugin</name>
   
   <build>
     <finalName>${project.artifactId}</finalName>

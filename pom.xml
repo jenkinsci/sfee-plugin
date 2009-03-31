@@ -55,11 +55,6 @@
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-      <version>1.5.1</version>
-    </dependency>
   	<dependency>
 	    <groupId>org.jvnet.hudson.plugins</groupId>
 	    <artifactId>description-setter</artifactId>

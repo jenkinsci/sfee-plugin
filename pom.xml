@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <description>This plugin integrates Hudson with a Source Forge Enterprise Edition (SFEE) Server</description>
   
-  <url>http://hudson.gotdns.com/wiki/display/HUDSON/SFEE+Plugin</url>
+  <url>http://wiki.hudson-ci.org/display/HUDSON/SFEE+Plugin</url>
     
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>

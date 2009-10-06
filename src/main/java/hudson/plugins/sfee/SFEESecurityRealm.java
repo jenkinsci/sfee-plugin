@@ -1,5 +1,6 @@
 package hudson.plugins.sfee;
 
+import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.Hudson;
 import hudson.security.SecurityRealm;
@@ -38,10 +39,12 @@ public class SFEESecurityRealm extends SecurityRealm {
 		return new SecurityComponents(manager, userDetailsService);
 	}
 
+	@Override
 	public Descriptor<SecurityRealm> getDescriptor() {
 		return DESCRIPTOR;
 	}
 
+	@Extension
 	public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
 	public static final class DescriptorImpl extends Descriptor<SecurityRealm> {
@@ -72,6 +75,7 @@ public class SFEESecurityRealm extends SecurityRealm {
 			save();
 		}
 
+		@Override
 		public String getHelpFile() {
 			return null;
 		}

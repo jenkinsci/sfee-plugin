@@ -1,5 +1,6 @@
 package hudson.plugins.sfee;
 
+import hudson.Extension;
 import hudson.model.User;
 import hudson.plugins.sfee.webservice.UserSoapRow;
 import hudson.tasks.MailAddressResolver;
@@ -17,6 +18,8 @@ import java.util.logging.Logger;
  * 
  */
 public class SFEEMailAddressResolver {
+
+	private static SFEEMailAddressResolver INSTANCE = new SFEEMailAddressResolver();
 
 	private static Logger log = Logger.getLogger(SFEEMailAddressResolver.class
 			.getName());
@@ -83,12 +86,14 @@ public class SFEEMailAddressResolver {
 		}
 	}
 
-	public MailAddressResolver getMailAddressResolver() {
-		return mailAddressResolver;
+	@Extension
+	public static MailAddressResolver getMailAddressResolver() {
+		return INSTANCE.mailAddressResolver;
 	}
 
-	public UserNameResolver getUserNameResolver() {
-		return userNameResolver;
+	@Extension
+	public static UserNameResolver getUserNameResolver() {
+		return INSTANCE.userNameResolver;
 	}
 
 }

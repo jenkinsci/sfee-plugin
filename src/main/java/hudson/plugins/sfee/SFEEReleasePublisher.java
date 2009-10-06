@@ -1,12 +1,15 @@
 package hudson.plugins.sfee;
 
+import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Descriptor;
-import hudson.model.Run;
 import hudson.plugins.descriptionsetter.DescriptionSetterAction;
-import hudson.security.Permission;
+import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.BuildStepMonitor;
+import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
 
 import java.io.BufferedReader;
@@ -22,7 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
-public class SFEEReleasePublisher extends Publisher {
+public class SFEEReleasePublisher extends Notifier {
 
 	private static final String REGEXP = ".*\\[INFO\\] Uploading project information for "
 			+ "[^\\s]* ([^\\s]*)";
@@ -50,6 +53,10 @@ public class SFEEReleasePublisher extends Publisher {
 		this.uploadAutomatically = uploadAutomatically;
 		this.sourceRegexp = sourceRegexp;
 		this.releaseName = releaseName;
+	}
+
+	public BuildStepMonitor getRequiredMonitorService() {
+		return BuildStepMonitor.BUILD;
 	}
 
 	@Override
@@ -112,7 +119,7 @@ public class SFEEReleasePublisher extends Publisher {
 		return null;
 	}
 
-	public static final class DescriptorImpl extends Descriptor<Publisher> {
+	public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
 		private DescriptorImpl() {
 			super(SFEEReleasePublisher.class);
@@ -129,15 +136,22 @@ public class SFEEReleasePublisher extends Publisher {
 		}
 
 		@Override
+		public boolean isApplicable(Class<? extends AbstractProject> jobType) {
+			return true;
+		}
+
+		@Override
 		public Publisher newInstance(StaplerRequest req, JSONObject formData)
 				throws FormException {
 			return req.bindJSON(SFEEReleasePublisher.class, formData);
 		}
 
+		@Extension
 		public static final DescriptorImpl INSTANCE = new DescriptorImpl();
 	}
 
-	public Descriptor<Publisher> getDescriptor() {
+	@Override
+	public BuildStepDescriptor<Publisher> getDescriptor() {
 		return DescriptorImpl.INSTANCE;
 	}
 

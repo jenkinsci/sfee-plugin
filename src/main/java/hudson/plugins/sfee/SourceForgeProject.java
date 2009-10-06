@@ -1,5 +1,6 @@
 package hudson.plugins.sfee;
 
+import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
 import hudson.model.Job;
@@ -162,6 +163,7 @@ public class SourceForgeProject extends JobProperty<AbstractProject<?, ?>> {
 			return getTitles(releasePackages);
 		}
 
+		@Extension
 		public static final DescriptorImpl INSTANCE = new DescriptorImpl();
 
 	}

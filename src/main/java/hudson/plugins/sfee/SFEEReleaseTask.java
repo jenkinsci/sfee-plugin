@@ -4,7 +4,6 @@ import hudson.Util;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BallColor;
-import hudson.model.LargeText;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskAction;
@@ -42,6 +41,7 @@ import javax.servlet.ServletException;
 
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.framework.io.LargeText;
 
 public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction
 		implements AccessControlled {
@@ -141,6 +141,7 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction
 			super(SFEEReleaseTask.this, Iterators.reverse(records), ADAPTER);
 		}
 
+		@Override
 		public String getDisplayName() {
 			return "Deployment History";
 		}
@@ -244,7 +245,7 @@ public class SFEEReleaseTask<T extends AbstractBuild> extends TaskAction
 
 									site.uploadFileForRelease(fileReleaseId,
 											buildArtifact.getFileName(),
-											buildArtifact.getFile().toURL(),
+											buildArtifact.getFile().toURI().toURL(),
 											isReplaceFiles());
 
 									listener.getLogger().println(

@@ -1,5 +1,6 @@
 package hudson.plugins.sfee;
 
+import hudson.Extension;
 import hudson.Util;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
@@ -40,6 +41,7 @@ import java.util.List;
 
 import javax.activation.DataHandler;
 
+import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -75,6 +77,8 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 
 	private transient String sessionId;
 	private transient TrackerAppSoap trackerApp;
+
+	@Extension
 	public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
 	@DataBoundConstructor
@@ -143,7 +147,7 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 		}
 
 		@Override
-		public boolean configure(StaplerRequest req) throws FormException {
+		public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
 			site = req.bindParameters(SourceForgeSite.class, "sfee.");
 			save();
 			return true;

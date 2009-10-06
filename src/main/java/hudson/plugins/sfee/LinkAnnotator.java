@@ -1,5 +1,6 @@
 package hudson.plugins.sfee;
 
+import hudson.Extension;
 import hudson.MarkupText;
 import hudson.MarkupText.SubText;
 import hudson.model.AbstractBuild;
@@ -8,6 +9,7 @@ import hudson.scm.ChangeLogSet.Entry;
 
 import java.util.regex.Pattern;
 
+@Extension
 public class LinkAnnotator extends ChangeLogAnnotator {
 	@Override
 	public void annotate(AbstractBuild<?, ?> build, Entry change,

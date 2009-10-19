@@ -14,6 +14,8 @@ public class LinkAnnotator extends ChangeLogAnnotator {
 	@Override
 	public void annotate(AbstractBuild<?, ?> build, Entry change,
 			MarkupText text) {
+		String site = getServer();
+		if (site == null) return;  // Plugin not configured
 		String url = "http://" + getServer() + "/sf/go/";
 
 		for (LinkMarkup markup : MARKUPS)
@@ -25,14 +27,8 @@ public class LinkAnnotator extends ChangeLogAnnotator {
 		private final String href;
 
 		LinkMarkup(String pattern, String href) {
-			pattern = NUM_PATTERN.matcher(pattern).replaceAll("(\\\\d+)"); // \\\\d
-			// becomes
-			// \\d
-			// when
-			// in
-			// the
-			// expanded
-			// text.
+			pattern = NUM_PATTERN.matcher(pattern).replaceAll("(\\\\d+)");
+			// \\\\d becomes \\d when in the expanded text -----^
 			pattern = ANYWORD_PATTERN.matcher(pattern).replaceAll(
 					"((?:\\\\w|[._-])+)");
 			this.pattern = Pattern.compile(pattern);
@@ -46,12 +42,12 @@ public class LinkAnnotator extends ChangeLogAnnotator {
 		}
 
 		private static final Pattern NUM_PATTERN = Pattern.compile("NUM");
-		private static final Pattern ANYWORD_PATTERN = Pattern
-				.compile("ANYWORD");
+		private static final Pattern ANYWORD_PATTERN = Pattern.compile("ANYWORD");
 	}
 
 	private String getServer() {
-		return SourceForgeSite.DESCRIPTOR.getSite().getSite();
+		SourceForgeSite site = SourceForgeSite.DESCRIPTOR.getSite();
+		return site != null ? site.getSite() : null;
 	}
 
 	static final LinkMarkup[] MARKUPS = new LinkMarkup[] { new LinkMarkup(

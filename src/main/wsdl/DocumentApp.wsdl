@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://schema.vasoftware.com/sf/soap43/service" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://schema.vasoftware.com/sf/soap43/service" xmlns:intf="http://schema.vasoftware.com/sf/soap43/service" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://schema.vasoftware.com/sf/soap43/type" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<wsdl:definitions targetNamespace="http://schema.open.collab.net/sfee50/soap50/service" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://schema.open.collab.net/sfee50/soap50/service" xmlns:intf="http://schema.open.collab.net/sfee50/soap50/service" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://schema.open.collab.net/sfee50/soap50/type" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <!--WSDL created by Apache Axis version: 1.4
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
-  <schema targetNamespace="http://schema.vasoftware.com/sf/soap43/type" xmlns="http://www.w3.org/2001/XMLSchema">
-   <import namespace="http://schema.vasoftware.com/sf/soap43/service"/>
+  <schema targetNamespace="http://schema.open.collab.net/sfee50/soap50/type" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schema.open.collab.net/sfee50/soap50/service"/>
    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
    <complexType abstract="true" name="ObjectSoapDO">
     <sequence>
@@ -37,6 +37,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
        <element name="documentVersion" type="xsd:int"/>
        <element name="fileName" nillable="true" type="xsd:string"/>
        <element name="fileSize" type="xsd:long"/>
+       <element name="fileUrl" nillable="true" type="xsd:string"/>
        <element name="latestVersion" type="xsd:int"/>
        <element name="locale" nillable="true" type="xsd:string"/>
        <element name="lockedBy" nillable="true" type="xsd:string"/>
@@ -86,6 +87,13 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </extension>
     </complexContent>
    </complexType>
+   <complexType name="InvalidAssociationFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
    <complexType name="InvalidOperationFault">
     <complexContent>
      <extension base="tns1:WebServiceFault">
@@ -127,10 +135,30 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </extension>
     </complexContent>
    </complexType>
+   <complexType name="InvalidDocumentContentFault">
+    <complexContent>
+     <extension base="tns1:WebServiceFault">
+      <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
    <complexType name="ObjectAlreadyExistsFault">
     <complexContent>
      <extension base="tns1:WebServiceFault">
       <sequence/>
+     </extension>
+    </complexContent>
+   </complexType>
+   <complexType name="DocumentReviewSoapDO">
+    <complexContent>
+     <extension base="tns1:ItemSoapDO">
+      <sequence>
+       <element name="description" nillable="true" type="xsd:string"/>
+       <element name="documentVersion" type="xsd:int"/>
+       <element name="dueDate" nillable="true" type="xsd:dateTime"/>
+       <element name="endDate" nillable="true" type="xsd:dateTime"/>
+       <element name="status" nillable="true" type="xsd:string"/>
+      </sequence>
      </extension>
     </complexContent>
    </complexType>
@@ -139,8 +167,12 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
    </complexType>
    <complexType name="FolderSoapRow">
     <sequence>
+     <element name="createdBy" nillable="true" type="xsd:string"/>
+     <element name="createdOn" nillable="true" type="xsd:dateTime"/>
      <element name="description" nillable="true" type="xsd:string"/>
      <element name="id" nillable="true" type="xsd:string"/>
+     <element name="lastModifiedBy" nillable="true" type="xsd:string"/>
+     <element name="lastModifiedOn" nillable="true" type="xsd:dateTime"/>
      <element name="parentFolderId" nillable="true" type="xsd:string"/>
      <element name="path" nillable="true" type="xsd:string"/>
      <element name="projectId" nillable="true" type="xsd:string"/>
@@ -207,12 +239,14 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      <element name="description" nillable="true" type="xsd:string"/>
      <element name="fileName" nillable="true" type="xsd:string"/>
      <element name="fileSize" type="xsd:long"/>
+     <element name="fileUrl" nillable="true" type="xsd:string"/>
      <element name="folderId" nillable="true" type="xsd:string"/>
      <element name="folderPathString" nillable="true" type="xsd:string"/>
      <element name="folderTitle" nillable="true" type="xsd:string"/>
      <element name="id" nillable="true" type="xsd:string"/>
      <element name="lastModifiedBy" nillable="true" type="xsd:string"/>
      <element name="lastModifiedByFullName" nillable="true" type="xsd:string"/>
+     <element name="lockedBy" nillable="true" type="xsd:string"/>
      <element name="mimeType" nillable="true" type="xsd:string"/>
      <element name="projectId" nillable="true" type="xsd:string"/>
      <element name="projectPathString" nillable="true" type="xsd:string"/>
@@ -238,28 +272,21 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </extension>
     </complexContent>
    </complexType>
-   <complexType name="InvalidDocumentContentFault">
-    <complexContent>
-     <extension base="tns1:WebServiceFault">
-      <sequence/>
-     </extension>
-    </complexContent>
-   </complexType>
   </schema>
-  <schema targetNamespace="http://schema.vasoftware.com/sf/soap43/service" xmlns="http://www.w3.org/2001/XMLSchema">
-   <import namespace="http://schema.vasoftware.com/sf/soap43/type"/>
+  <schema targetNamespace="http://schema.open.collab.net/sfee50/soap50/service" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schema.open.collab.net/sfee50/soap50/type"/>
    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
-   <complexType name="ArrayOf_tns1_DocumentFolderSoapRow">
-    <complexContent>
-     <restriction base="soapenc:Array">
-      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:DocumentFolderSoapRow[]"/>
-     </restriction>
-    </complexContent>
-   </complexType>
    <complexType name="ArrayOf_xsd_string">
     <complexContent>
      <restriction base="soapenc:Array">
       <attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+   <complexType name="ArrayOf_tns1_DocumentFolderSoapRow">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:DocumentFolderSoapRow[]"/>
      </restriction>
     </complexContent>
    </complexType>
@@ -287,183 +314,9 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
   </schema>
  </wsdl:types>
 
-   <wsdl:message name="setDocumentFolderDataRequest">
+   <wsdl:message name="createDocumentResponse">
 
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="documentFolderData" type="tns1:DocumentFolderSoapDO"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentReviewListRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="containerId" type="xsd:string"/>
-
-      <wsdl:part name="filters" type="impl:ArrayOf_tns1_SoapFilter"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getAssignedDocumentReviewListResponse">
-
-      <wsdl:part name="getAssignedDocumentReviewListReturn" type="tns1:DocumentReviewSoapList"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="setDocumentDataWithUrlResponse">
-
-   </wsdl:message>
-
-   <wsdl:message name="NoSuchObjectFault">
-
-      <wsdl:part name="fault" type="tns1:NoSuchObjectFault"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentFolderListRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="parentId" type="xsd:string"/>
-
-      <wsdl:part name="recursive" type="xsd:boolean"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentReviewListResponse">
-
-      <wsdl:part name="getDocumentReviewListReturn" type="tns1:DocumentReviewSoapList"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="moveDocumentResponse">
-
-      <wsdl:part name="moveDocumentReturn" type="tns1:DocumentSoapDO"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="setDocumentDataRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="documentData" type="tns1:DocumentSoapDO"/>
-
-      <wsdl:part name="fileId" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentFolderListResponse">
-
-      <wsdl:part name="getDocumentFolderListReturn" type="tns1:DocumentFolderSoapList"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentListResponse">
-
-      <wsdl:part name="getDocumentListReturn" type="tns1:DocumentSoapList"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="InvalidSessionFault">
-
-      <wsdl:part name="fault" type="tns1:InvalidSessionFault"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="createDocumentFolderResponse">
-
-      <wsdl:part name="createDocumentFolderReturn" type="tns1:DocumentFolderSoapDO"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="InvalidDocumentContentFault">
-
-      <wsdl:part name="fault" type="tns1:InvalidDocumentContentFault"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentFileIdResponse">
-
-      <wsdl:part name="getDocumentFileIdReturn" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentListRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="parentId" type="xsd:string"/>
-
-      <wsdl:part name="filters" type="impl:ArrayOf_tns1_SoapFilter"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="deleteDocumentResponse">
-
-   </wsdl:message>
-
-   <wsdl:message name="deleteDocumentFolderRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="folderId" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="createDocumentWithUrlRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="parentId" type="xsd:string"/>
-
-      <wsdl:part name="title" type="xsd:string"/>
-
-      <wsdl:part name="description" type="xsd:string"/>
-
-      <wsdl:part name="versionComment" type="xsd:string"/>
-
-      <wsdl:part name="status" type="xsd:string"/>
-
-      <wsdl:part name="createLocked" type="xsd:boolean"/>
-
-      <wsdl:part name="fileUrl" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="findDocumentsResponse">
-
-      <wsdl:part name="findDocumentsReturn" type="tns1:DocumentSoapList"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentFileUrlRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="documentId" type="xsd:string"/>
-
-      <wsdl:part name="documentVersion" type="xsd:int"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentFileIdRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="documentId" type="xsd:string"/>
-
-      <wsdl:part name="documentVersion" type="xsd:int"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="setDocumentDataWithUrlRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="documentData" type="tns1:DocumentSoapDO"/>
-
-      <wsdl:part name="fileUrl" type="xsd:string"/>
+      <wsdl:part name="createDocumentReturn" type="tns1:DocumentSoapDO"/>
 
    </wsdl:message>
 
@@ -473,157 +326,25 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
-   <wsdl:message name="moveDocumentRequest">
+   <wsdl:message name="InvalidSessionFault">
 
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="documentId" type="xsd:string"/>
-
-      <wsdl:part name="targetFolderId" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="setDocumentDataResponse">
-
-   </wsdl:message>
-
-   <wsdl:message name="createDocumentWithUrlResponse">
-
-      <wsdl:part name="createDocumentWithUrlReturn" type="tns1:DocumentSoapDO"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="SearchQuerySyntaxFault">
-
-      <wsdl:part name="fault" type="tns1:SearchQuerySyntaxFault"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentDataResponse">
-
-      <wsdl:part name="getDocumentDataReturn" type="tns1:DocumentSoapDO"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getAssignedDocumentReviewListRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="username" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="createDocumentResponse">
-
-      <wsdl:part name="createDocumentReturn" type="tns1:DocumentSoapDO"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="NoSuchVersionFault">
-
-      <wsdl:part name="fault" type="tns1:NoSuchVersionFault"/>
+      <wsdl:part name="fault" type="tns1:InvalidSessionFault"/>
 
    </wsdl:message>
 
    <wsdl:message name="moveDocumentFolderRequest">
 
-      <wsdl:part name="sessionId" type="xsd:string"/>
+      <wsdl:part name="sessionId" type="soapenc:string"/>
 
-      <wsdl:part name="folderId" type="xsd:string"/>
+      <wsdl:part name="folderId" type="soapenc:string"/>
 
-      <wsdl:part name="destFolderId" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentFolderDataResponse">
-
-      <wsdl:part name="getDocumentFolderDataReturn" type="tns1:DocumentFolderSoapDO"/>
+      <wsdl:part name="destFolderId" type="soapenc:string"/>
 
    </wsdl:message>
 
-   <wsdl:message name="getDocumentFolderDataRequest">
+   <wsdl:message name="moveDocumentResponse">
 
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="folderId" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="PermissionDeniedFault">
-
-      <wsdl:part name="fault" type="tns1:PermissionDeniedFault"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="deleteDocumentRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="documentId" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="findDocumentsRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="queryString" type="xsd:string"/>
-
-      <wsdl:part name="projectId" type="xsd:string"/>
-
-      <wsdl:part name="searchAttachments" type="xsd:boolean"/>
-
-      <wsdl:part name="currentVersionsOnly" type="xsd:boolean"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="createDocumentFolderRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="parentId" type="xsd:string"/>
-
-      <wsdl:part name="title" type="xsd:string"/>
-
-      <wsdl:part name="description" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="deleteDocumentFolderResponse">
-
-   </wsdl:message>
-
-   <wsdl:message name="moveDocumentFolderResponse">
-
-      <wsdl:part name="moveDocumentFolderReturn" type="tns1:DocumentFolderSoapDO"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="VersionMismatchFault">
-
-      <wsdl:part name="fault" type="tns1:VersionMismatchFault"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentDataRequest">
-
-      <wsdl:part name="sessionId" type="xsd:string"/>
-
-      <wsdl:part name="documentId" type="xsd:string"/>
-
-      <wsdl:part name="documentVersion" type="xsd:int"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="getDocumentFileUrlResponse">
-
-      <wsdl:part name="getDocumentFileUrlReturn" type="xsd:string"/>
-
-   </wsdl:message>
-
-   <wsdl:message name="InvalidOperationFault">
-
-      <wsdl:part name="fault" type="tns1:InvalidOperationFault"/>
+      <wsdl:part name="moveDocumentReturn" type="tns1:DocumentSoapDO"/>
 
    </wsdl:message>
 
@@ -633,7 +354,127 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
-   <wsdl:message name="setDocumentFolderDataResponse">
+   <wsdl:message name="setDocumentDataRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="documentData" type="tns1:DocumentSoapDO"/>
+
+      <wsdl:part name="fileId" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createDocumentWithUrlRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="parentId" type="soapenc:string"/>
+
+      <wsdl:part name="title" type="soapenc:string"/>
+
+      <wsdl:part name="description" type="soapenc:string"/>
+
+      <wsdl:part name="versionComment" type="soapenc:string"/>
+
+      <wsdl:part name="status" type="soapenc:string"/>
+
+      <wsdl:part name="createLocked" type="xsd:boolean"/>
+
+      <wsdl:part name="fileUrl" type="soapenc:string"/>
+
+      <wsdl:part name="associationId" type="soapenc:string"/>
+
+      <wsdl:part name="associationDesc" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createReviewResponse">
+
+      <wsdl:part name="createReviewReturn" type="tns1:DocumentReviewSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAssignedDocumentReviewListRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="username" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="NoSuchObjectFault">
+
+      <wsdl:part name="fault" type="tns1:NoSuchObjectFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="InvalidOperationFault">
+
+      <wsdl:part name="fault" type="tns1:InvalidOperationFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createDocumentFolderRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="parentId" type="soapenc:string"/>
+
+      <wsdl:part name="title" type="soapenc:string"/>
+
+      <wsdl:part name="description" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createDocumentFolderResponse">
+
+      <wsdl:part name="createDocumentFolderReturn" type="tns1:DocumentFolderSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="InvalidAssociationFault">
+
+      <wsdl:part name="fault" type="tns1:InvalidAssociationFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteDocumentResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getAssignedDocumentReviewListResponse">
+
+      <wsdl:part name="getAssignedDocumentReviewListReturn" type="tns1:DocumentReviewSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="moveDocumentRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="documentId" type="soapenc:string"/>
+
+      <wsdl:part name="targetFolderId" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="findDocumentsRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="queryString" type="soapenc:string"/>
+
+      <wsdl:part name="projectId" type="soapenc:string"/>
+
+      <wsdl:part name="searchAttachments" type="xsd:boolean"/>
+
+      <wsdl:part name="currentVersionsOnly" type="xsd:boolean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentFileIdResponse">
+
+      <wsdl:part name="getDocumentFileIdReturn" type="soapenc:string"/>
 
    </wsdl:message>
 
@@ -643,43 +484,261 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
+   <wsdl:message name="createDocumentWithUrlResponse">
+
+      <wsdl:part name="createDocumentWithUrlReturn" type="tns1:DocumentSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentFolderDataResponse">
+
+      <wsdl:part name="getDocumentFolderDataReturn" type="tns1:DocumentFolderSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentFolderListResponse">
+
+      <wsdl:part name="getDocumentFolderListReturn" type="tns1:DocumentFolderSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="NoSuchVersionFault">
+
+      <wsdl:part name="fault" type="tns1:NoSuchVersionFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="PermissionDeniedFault">
+
+      <wsdl:part name="fault" type="tns1:PermissionDeniedFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setDocumentDataWithAssociationResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="moveDocumentFolderResponse">
+
+      <wsdl:part name="moveDocumentFolderReturn" type="tns1:DocumentFolderSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createDocumentRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="parentId" type="soapenc:string"/>
+
+      <wsdl:part name="title" type="soapenc:string"/>
+
+      <wsdl:part name="description" type="soapenc:string"/>
+
+      <wsdl:part name="versionComment" type="soapenc:string"/>
+
+      <wsdl:part name="status" type="soapenc:string"/>
+
+      <wsdl:part name="createLocked" type="xsd:boolean"/>
+
+      <wsdl:part name="fileName" type="soapenc:string"/>
+
+      <wsdl:part name="mimeType" type="soapenc:string"/>
+
+      <wsdl:part name="fileId" type="soapenc:string"/>
+
+      <wsdl:part name="associationId" type="soapenc:string"/>
+
+      <wsdl:part name="associationDesc" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteDocumentFolderResponse">
+
+   </wsdl:message>
+
    <wsdl:message name="InvalidFilterFault">
 
       <wsdl:part name="fault" type="tns1:InvalidFilterFault"/>
 
    </wsdl:message>
 
-   <wsdl:message name="createDocumentRequest">
+   <wsdl:message name="InvalidDocumentContentFault">
 
-      <wsdl:part name="sessionId" type="xsd:string"/>
+      <wsdl:part name="fault" type="tns1:InvalidDocumentContentFault"/>
 
-      <wsdl:part name="parentId" type="xsd:string"/>
+   </wsdl:message>
 
-      <wsdl:part name="title" type="xsd:string"/>
+   <wsdl:message name="findDocumentsResponse">
 
-      <wsdl:part name="description" type="xsd:string"/>
+      <wsdl:part name="findDocumentsReturn" type="tns1:DocumentSoapList"/>
 
-      <wsdl:part name="versionComment" type="xsd:string"/>
+   </wsdl:message>
 
-      <wsdl:part name="status" type="xsd:string"/>
+   <wsdl:message name="getDocumentListResponse">
 
-      <wsdl:part name="createLocked" type="xsd:boolean"/>
+      <wsdl:part name="getDocumentListReturn" type="tns1:DocumentSoapList"/>
 
-      <wsdl:part name="fileName" type="xsd:string"/>
+   </wsdl:message>
 
-      <wsdl:part name="mimeType" type="xsd:string"/>
+   <wsdl:message name="getDocumentFolderDataRequest">
 
-      <wsdl:part name="fileId" type="xsd:string"/>
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="folderId" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentFolderListRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="parentId" type="soapenc:string"/>
+
+      <wsdl:part name="recursive" type="xsd:boolean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentDataResponse">
+
+      <wsdl:part name="getDocumentDataReturn" type="tns1:DocumentSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteDocumentFolderRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="folderId" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentFileIdRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="documentId" type="soapenc:string"/>
+
+      <wsdl:part name="documentVersion" type="xsd:int"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentReviewListRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="containerId" type="soapenc:string"/>
+
+      <wsdl:part name="filters" type="impl:ArrayOf_tns1_SoapFilter"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setDocumentFolderDataRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="documentFolderData" type="tns1:DocumentFolderSoapDO"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setDocumentFolderDataResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentReviewListResponse">
+
+      <wsdl:part name="getDocumentReviewListReturn" type="tns1:DocumentReviewSoapList"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="createReviewRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="documentId" type="soapenc:string"/>
+
+      <wsdl:part name="version" type="xsd:int"/>
+
+      <wsdl:part name="title" type="soapenc:string"/>
+
+      <wsdl:part name="description" type="soapenc:string"/>
+
+      <wsdl:part name="dueDate" type="xsd:dateTime"/>
+
+      <wsdl:part name="requiredReviewers" type="impl:ArrayOf_xsd_string"/>
+
+      <wsdl:part name="optionalReviewers" type="impl:ArrayOf_xsd_string"/>
+
+      <wsdl:part name="attachDocument" type="xsd:boolean"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setDocumentDataResponse">
+
+   </wsdl:message>
+
+   <wsdl:message name="setDocumentDataWithAssociationRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="documentData" type="tns1:DocumentSoapDO"/>
+
+      <wsdl:part name="fileId" type="soapenc:string"/>
+
+      <wsdl:part name="associationId" type="soapenc:string"/>
+
+      <wsdl:part name="associationComment" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentDataRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="documentId" type="soapenc:string"/>
+
+      <wsdl:part name="documentVersion" type="xsd:int"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="SearchQuerySyntaxFault">
+
+      <wsdl:part name="fault" type="tns1:SearchQuerySyntaxFault"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDocumentListRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="parentId" type="soapenc:string"/>
+
+      <wsdl:part name="filters" type="impl:ArrayOf_tns1_SoapFilter"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="deleteDocumentRequest">
+
+      <wsdl:part name="sessionId" type="soapenc:string"/>
+
+      <wsdl:part name="documentId" type="soapenc:string"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="VersionMismatchFault">
+
+      <wsdl:part name="fault" type="tns1:VersionMismatchFault"/>
 
    </wsdl:message>
 
    <wsdl:portType name="DocumentAppSoap">
 
-      <wsdl:operation name="createDocument" parameterOrder="sessionId parentId title description versionComment status createLocked fileName mimeType fileId">
+      <wsdl:operation name="createDocument" parameterOrder="sessionId parentId title description versionComment status createLocked fileName mimeType fileId associationId associationDesc">
 
          <wsdl:input message="impl:createDocumentRequest" name="createDocumentRequest"/>
 
          <wsdl:output message="impl:createDocumentResponse" name="createDocumentResponse"/>
+
+         <wsdl:fault message="impl:InvalidAssociationFault" name="InvalidAssociationFault"/>
 
          <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
 
@@ -758,6 +817,32 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
          <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
 
          <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:InvalidDocumentContentFault" name="InvalidDocumentContentFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setDocumentDataWithAssociation" parameterOrder="sessionId documentData fileId associationId associationComment">
+
+         <wsdl:input message="impl:setDocumentDataWithAssociationRequest" name="setDocumentDataWithAssociationRequest"/>
+
+         <wsdl:output message="impl:setDocumentDataWithAssociationResponse" name="setDocumentDataWithAssociationResponse"/>
+
+         <wsdl:fault message="impl:InvalidAssociationFault" name="InvalidAssociationFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:InvalidDocumentContentFault" name="InvalidDocumentContentFault"/>
 
          <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
 
@@ -857,6 +942,26 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="createReview" parameterOrder="sessionId documentId version title description dueDate requiredReviewers optionalReviewers attachDocument">
+
+         <wsdl:input message="impl:createReviewRequest" name="createReviewRequest"/>
+
+         <wsdl:output message="impl:createReviewResponse" name="createReviewResponse"/>
+
+         <wsdl:fault message="impl:ObjectAlreadyExistsFault" name="ObjectAlreadyExistsFault"/>
+
+         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
+
+         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
+
+         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
+
+         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
+
+         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
+
+      </wsdl:operation>
+
       <wsdl:operation name="getDocumentFolderList" parameterOrder="sessionId parentId recursive">
 
          <wsdl:input message="impl:getDocumentFolderListRequest" name="getDocumentFolderListRequest"/>
@@ -941,11 +1046,13 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="createDocumentWithUrl" parameterOrder="sessionId parentId title description versionComment status createLocked fileUrl">
+      <wsdl:operation name="createDocumentWithUrl" parameterOrder="sessionId parentId title description versionComment status createLocked fileUrl associationId associationDesc">
 
          <wsdl:input message="impl:createDocumentWithUrlRequest" name="createDocumentWithUrlRequest"/>
 
          <wsdl:output message="impl:createDocumentWithUrlResponse" name="createDocumentWithUrlResponse"/>
+
+         <wsdl:fault message="impl:InvalidAssociationFault" name="InvalidAssociationFault"/>
 
          <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
 
@@ -961,49 +1068,11 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="setDocumentDataWithUrl" parameterOrder="sessionId documentData fileUrl">
-
-         <wsdl:input message="impl:setDocumentDataWithUrlRequest" name="setDocumentDataWithUrlRequest"/>
-
-         <wsdl:output message="impl:setDocumentDataWithUrlResponse" name="setDocumentDataWithUrlResponse"/>
-
-         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
-
-         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
-
-         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
-
-         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
-
-         <wsdl:fault message="impl:IllegalArgumentFault" name="IllegalArgumentFault"/>
-
-         <wsdl:fault message="impl:VersionMismatchFault" name="VersionMismatchFault"/>
-
-      </wsdl:operation>
-
       <wsdl:operation name="getDocumentFileId" parameterOrder="sessionId documentId documentVersion">
 
          <wsdl:input message="impl:getDocumentFileIdRequest" name="getDocumentFileIdRequest"/>
 
          <wsdl:output message="impl:getDocumentFileIdResponse" name="getDocumentFileIdResponse"/>
-
-         <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
-
-         <wsdl:fault message="impl:InvalidSessionFault" name="InvalidSessionFault"/>
-
-         <wsdl:fault message="impl:PermissionDeniedFault" name="PermissionDeniedFault"/>
-
-         <wsdl:fault message="impl:SystemFault" name="SystemFault"/>
-
-         <wsdl:fault message="impl:NoSuchVersionFault" name="NoSuchVersionFault"/>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="getDocumentFileUrl" parameterOrder="sessionId documentId documentVersion">
-
-         <wsdl:input message="impl:getDocumentFileUrlRequest" name="getDocumentFileUrlRequest"/>
-
-         <wsdl:output message="impl:getDocumentFileUrlResponse" name="getDocumentFileUrlResponse"/>
 
          <wsdl:fault message="impl:NoSuchObjectFault" name="NoSuchObjectFault"/>
 
@@ -1029,43 +1098,49 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="createDocumentRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="createDocumentResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
+         <wsdl:fault name="InvalidAssociationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidAssociationFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="IllegalArgumentFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1077,49 +1152,49 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="deleteDocumentFolderRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="deleteDocumentFolderResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="InvalidOperationFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidOperationFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="IllegalArgumentFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1131,37 +1206,37 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="moveDocumentFolderRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="moveDocumentFolderResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1173,43 +1248,43 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="getDocumentDataRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="getDocumentDataResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="NoSuchVersionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchVersionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchVersionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1221,49 +1296,121 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="setDocumentDataRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="setDocumentDataResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidDocumentContentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidDocumentContentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="IllegalArgumentFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="VersionMismatchFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setDocumentDataWithAssociation">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setDocumentDataWithAssociationRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setDocumentDataWithAssociationResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="InvalidAssociationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidAssociationFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidDocumentContentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidDocumentContentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="VersionMismatchFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1275,49 +1422,49 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="setDocumentFolderDataRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="setDocumentFolderDataResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="IllegalArgumentFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="VersionMismatchFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1329,37 +1476,37 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="deleteDocumentRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="deleteDocumentResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1371,37 +1518,37 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="moveDocumentRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="moveDocumentResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1413,49 +1560,49 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="createDocumentFolderRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="createDocumentFolderResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="ObjectAlreadyExistsFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="ObjectAlreadyExistsFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="ObjectAlreadyExistsFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="IllegalArgumentFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1467,43 +1614,97 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="getDocumentFolderDataRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="getDocumentFolderDataResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="IllegalArgumentFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="createReview">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createReviewRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createReviewResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="ObjectAlreadyExistsFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="ObjectAlreadyExistsFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="NoSuchObjectFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="InvalidSessionFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="PermissionDeniedFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="SystemFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
+         <wsdl:fault name="IllegalArgumentFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1515,37 +1716,37 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="getDocumentFolderListRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="getDocumentFolderListResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1557,37 +1758,37 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="getAssignedDocumentReviewListRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="getAssignedDocumentReviewListResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1599,43 +1800,43 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="getDocumentReviewListRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="getDocumentReviewListResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidFilterFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidFilterFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidFilterFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1647,43 +1848,43 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="getDocumentListRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="getDocumentListResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidFilterFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidFilterFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidFilterFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1695,37 +1896,37 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="findDocumentsRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="findDocumentsResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SearchQuerySyntaxFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SearchQuerySyntaxFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SearchQuerySyntaxFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1737,103 +1938,55 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="createDocumentWithUrlRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="createDocumentWithUrlResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
+         <wsdl:fault name="InvalidAssociationFault">
+
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidAssociationFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
+
+         </wsdl:fault>
+
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidDocumentContentFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidDocumentContentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidDocumentContentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="IllegalArgumentFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="setDocumentDataWithUrl">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="setDocumentDataWithUrlRequest">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="setDocumentDataWithUrlResponse">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:output>
-
-         <wsdl:fault name="NoSuchObjectFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="InvalidSessionFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="PermissionDeniedFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="SystemFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="IllegalArgumentFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="VersionMismatchFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="VersionMismatchFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="IllegalArgumentFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1845,91 +1998,43 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
          <wsdl:input name="getDocumentFileIdRequest">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:input>
 
          <wsdl:output name="getDocumentFileIdResponse">
 
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:output>
 
          <wsdl:fault name="NoSuchObjectFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="InvalidSessionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="PermissionDeniedFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="SystemFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
          <wsdl:fault name="NoSuchVersionFault">
 
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchVersionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="getDocumentFileUrl">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="getDocumentFileUrlRequest">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="getDocumentFileUrlResponse">
-
-            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:output>
-
-         <wsdl:fault name="NoSuchObjectFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchObjectFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="InvalidSessionFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="InvalidSessionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="PermissionDeniedFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="PermissionDeniedFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="SystemFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="SystemFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
-
-         </wsdl:fault>
-
-         <wsdl:fault name="NoSuchVersionFault">
-
-            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchVersionFault" namespace="http://schema.vasoftware.com/sf/soap43/service" use="encoded"/>
+            <wsdlsoap:fault encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" name="NoSuchVersionFault" namespace="http://schema.open.collab.net/sfee50/soap50/service" use="encoded"/>
 
          </wsdl:fault>
 
@@ -1941,7 +2046,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       <wsdl:port binding="impl:DocumentAppSoapBinding" name="DocumentApp">
 
-         <wsdlsoap:address location="http://localhost:8080/sf-soap43/services/DocumentApp"/>
+         <wsdlsoap:address location="http://localhost:8080/ce-soap50/services/DocumentApp"/>
 
       </wsdl:port>
 

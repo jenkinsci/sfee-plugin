@@ -61,7 +61,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       <wsdl:port binding="impl:AdminServiceSoapBinding" name="AdminService">
 
-         <wsdlsoap:address location="http://localhost:8080/sf-soap43/services/AdminService"/>
+         <wsdlsoap:address location="http://localhost:8080/ce-soap50/services/AdminService"/>
 
       </wsdl:port>
 

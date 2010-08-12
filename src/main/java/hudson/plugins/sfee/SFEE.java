@@ -1,5 +1,6 @@
 package hudson.plugins.sfee;
 
+import hudson.plugins.sfee.webservice.CollabNetSoap;
 import hudson.plugins.sfee.webservice.InvalidSessionFault;
 import hudson.plugins.sfee.webservice.LoginFault;
 import hudson.plugins.sfee.webservice.ProjectSoapList;
@@ -9,7 +10,6 @@ import hudson.plugins.sfee.webservice.RoleClusterSoapList;
 import hudson.plugins.sfee.webservice.RoleClusterSoapRow;
 import hudson.plugins.sfee.webservice.RoleSoapList;
 import hudson.plugins.sfee.webservice.RoleSoapRow;
-import hudson.plugins.sfee.webservice.SourceForgeSoap;
 import hudson.plugins.sfee.webservice.SystemFault;
 
 import java.lang.reflect.Method;
@@ -29,10 +29,10 @@ public class SFEE {
 	 * Returns a stub for the webservice.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T getSourceForgeApp(String host, Class<T> klazz) {
+	public static <T> T getCollabNetApp(String host, Class<T> klazz) {
 		try {
 			URL endpoint = new URL("http://" + host
-					+ ":8080/sf-soap43/services/"
+					+ ":8080/ce-soap50/services/"
 					+ klazz.getSimpleName().replace("Soap", ""));
 			String serviceName = klazz.getSimpleName();
 			String packageName = klazz.getName().substring(0,
@@ -52,7 +52,7 @@ public class SFEE {
 
 	public static String createSession(String host, String userId,
 			String password) {
-		SourceForgeSoap sfSoap = getSourceForgeApp(host, SourceForgeSoap.class);
+		CollabNetSoap sfSoap = getCollabNetApp(host, CollabNetSoap.class);
 		try {
 			String sessionId = sfSoap.login(userId, password);
 			return sessionId;
@@ -76,8 +76,8 @@ public class SFEE {
 
 	public static ProjectSoapRow[] getProjects(String sessionId, String host) {
 		try {
-			SourceForgeSoap sfSoap = getSourceForgeApp(host,
-					SourceForgeSoap.class);
+			CollabNetSoap sfSoap = getCollabNetApp(host,
+					CollabNetSoap.class);
 			ProjectSoapList projectList = sfSoap.getProjectList(sessionId);
 			return projectList.getDataRows();
 		} catch (InvalidSessionFault e) {
@@ -92,8 +92,8 @@ public class SFEE {
 	public static void main(String[] args) throws Exception {
 		System.setProperty(SAXParserFactory.class.getName(),
 				SAXParserFactoryImpl.class.getName());
-		String id = createSession("oasis.mitra.com", "awpyv", "SDF5422");
-		RbacAppSoap rbac = getSourceForgeApp("oasis.mitra.com",
+		String id = createSession("oasis.mitra.com", "awpyv", "test");
+		RbacAppSoap rbac = getCollabNetApp("oasis.mitra.com",
 				RbacAppSoap.class);
 
 		RoleSoapList userRoleList = rbac.getUserRoleList(id, "proj1058", "bob");

@@ -9,6 +9,7 @@ import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
 import hudson.plugins.sfee.webservice.ArtifactDetailSoapList;
 import hudson.plugins.sfee.webservice.ArtifactDetailSoapRow;
+import hudson.plugins.sfee.webservice.CollabNetSoap;
 import hudson.plugins.sfee.webservice.FileStorageAppSoap;
 import hudson.plugins.sfee.webservice.FrsAppSoap;
 import hudson.plugins.sfee.webservice.FrsFileSoapDO;
@@ -25,7 +26,6 @@ import hudson.plugins.sfee.webservice.ReleaseSoapDO;
 import hudson.plugins.sfee.webservice.ReleaseSoapList;
 import hudson.plugins.sfee.webservice.ReleaseSoapRow;
 import hudson.plugins.sfee.webservice.SearchQuerySyntaxFault;
-import hudson.plugins.sfee.webservice.SourceForgeSoap;
 import hudson.plugins.sfee.webservice.SystemFault;
 import hudson.plugins.sfee.webservice.TrackerAppSoap;
 import hudson.plugins.sfee.webservice.TrackerSoapRow;
@@ -42,20 +42,15 @@ import java.util.List;
 import javax.activation.DataHandler;
 
 import net.sf.json.JSONObject;
+
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
-/**
- * Represents an external JIRA installation and configuration needed to access
- * this JIRA.
- * 
- * @author Kohsuke Kawaguchi
- */
 public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 		implements Serializable {
 
 	private transient FrsAppSoap frsApp;
-	private transient SourceForgeSoap sfApp;
+	private transient CollabNetSoap sfApp;
 
 	private long lastSessionRequest;
 
@@ -156,26 +151,30 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 		public SourceForgeSite getSite() {
 			return site;
 		}
+
+		public void setSite(SourceForgeSite site) {
+			this.site = site;
+		}
 	}
 
 	public FrsAppSoap getFrsApp() {
 		if (frsApp == null) {
-			frsApp = SFEE.getSourceForgeApp(site, FrsAppSoap.class);
+			frsApp = SFEE.getCollabNetApp(site, FrsAppSoap.class);
 
 		}
 		return frsApp;
 	}
 
-	public SourceForgeSoap getSfApp() {
+	public CollabNetSoap getSfApp() {
 		if (sfApp == null) {
-			sfApp = SFEE.getSourceForgeApp(site, SourceForgeSoap.class);
+			sfApp = SFEE.getCollabNetApp(site, CollabNetSoap.class);
 		}
 		return sfApp;
 	}
 
 	public TrackerAppSoap getTrackerApp() {
 		if (trackerApp == null) {
-			trackerApp = SFEE.getSourceForgeApp(site, TrackerAppSoap.class);
+			trackerApp = SFEE.getCollabNetApp(site, TrackerAppSoap.class);
 		}
 		return trackerApp;
 	}
@@ -185,7 +184,7 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 	}
 
 	public FileStorageAppSoap getFileStorageApp() {
-		return SFEE.getSourceForgeApp(site, FileStorageAppSoap.class);
+		return SFEE.getCollabNetApp(site, FileStorageAppSoap.class);
 	}
 
 	/**
@@ -262,7 +261,7 @@ public class SourceForgeSite extends JobProperty<AbstractProject<?, ?>>
 
 		for (TrackerSoapRow trackerRow : getTrackers(projectId)) {
 			ArtifactDetailSoapList artifactDetailList = trackerApp
-					.getArtifactDetailList(sessionId, trackerRow.getId(), null);
+					.getArtifactDetailList(sessionId, trackerRow.getId(), null, null, null, 0, -1, false, true);
 
 			for (ArtifactDetailSoapRow row : artifactDetailList.getDataRows()) {
 				if (releaseTitle.equals(row.getResolvedInReleaseTitle())) {

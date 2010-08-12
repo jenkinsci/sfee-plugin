@@ -14,7 +14,7 @@
   <artifactId>sfee</artifactId>
   <packaging>hpi</packaging>
   <name>SFEE Plugin</name>
-  <version>1.0.4</version>
+  <version>1.0.5-SNAPSHOT</version>
   
   <build>
     <finalName>${project.artifactId}</finalName>
@@ -148,10 +148,4 @@
   <properties>
     <hudson.version>1.361</hudson.version>
   </properties>
-
-  <scm>
-    <connection>scm:svn:https://guest@svn.dev.java.net/svn/hudson/tags/sfee-1.0.4</connection>
-    <developerConnection>scm:svn:https://svn.dev.java.net/svn/hudson/tags/sfee-1.0.4</developerConnection>
-    <url>https://hudson.dev.java.net/source/browse/hudson/tags/sfee-1.0.4</url>
-  </scm>
 </project>
